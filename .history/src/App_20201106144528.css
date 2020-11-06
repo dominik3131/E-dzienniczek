@@ -1,0 +1,11 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.app {
+  min-width: 100px;
+  min-height: 100px;
+  overflow: hidden;
+}
