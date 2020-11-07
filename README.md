@@ -50,4 +50,3 @@ Open [http://localhost:8000/admin/](http://localhost:8000/admin/) to access djan
 
 ### `exit`
 Leave virtual enviroment
-If some changes were made to frontend run `yarn build` before running this
