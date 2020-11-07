@@ -37,7 +37,7 @@ Run every time after `git pull`
 ### `poetry add <package_name>`
 Installs new package
 
-### `poetry freeze > requirements.txt`
+### `pip freeze > requirements.txt`
 Saves dependencies from virtual enviroment to requirements.txt
 Run always after `poetry add <package_name>`
 
