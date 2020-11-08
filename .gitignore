@@ -24,4 +24,5 @@ yarn-error.log*
 
 .vscode/
 /backend/migrations/
+/backend/__pycache__/
 .idea/
