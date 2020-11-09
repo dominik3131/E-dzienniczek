@@ -3,9 +3,46 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import ugettext_lazy as _
+
+class UserManager(BaseUserManager):
+    """
+    Custom user model manager where email is the unique identifiers
+    for authentication instead of usernames.
+    """
+
+    def create_user(self, email, password, **extra_fields):
+        """
+        Create and save a User with the given email and password.
+        """
+        if not email:
+            raise ValueError(_('The Email must be set'))
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        extra_fields.setdefault('is_active', True)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        """
+        Create and save a SuperUser with the given email and password.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('Superuser must have is_staff=True.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('Superuser must have is_superuser=True.'))
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
+    objects = UserManager()
+
     class Types(models.TextChoices):
         ADMINISTRATOR = "ADMINISTRATOR", "Administrator"
         TEACHER = "TEACHER", "Teacher"
@@ -18,17 +55,14 @@ class User(AbstractUser):
         _("Type"), max_length=50, choices=Types.choices, default=base_type
     )
 
-    # First Name and Last Name Do Not Cover Name Patterns
-    # Around the Globe.
-    name = models.CharField(_("Name of User"), blank=True, max_length=255)
+    username = None
+    email = models.EmailField(_('email address'), unique=True)
 
-    def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.type = self.base_type
-        return super().save(*args, **kwargs)
+    def __str__(self):
+        return self.email
 
 
 # ---------------------------------------------------------------------------------------------
@@ -36,7 +70,7 @@ class User(AbstractUser):
 # ---------------------------------------------------------------------------------------------
 
 
-class AdministratorManager(models.Manager):
+class AdministratorManager(UserManager):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.ADMINISTRATOR)
 
@@ -62,9 +96,12 @@ class Administrator(User):
 # ---------------------------------------------------------------------------------------------
 
 
-class TeacherManager(models.Manager):
+class TeacherManager(UserManager):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.TEACHER)
+
+    def create_superuser(self, email, password, **extra_fields):
+        pass
 
 
 class TeacherDetails(models.Model):
@@ -96,10 +133,12 @@ class SchoolClass(models.Model):
 # ---------------------------------------------------------------------------------------------
 
 
-class StudentManager(models.Manager):
+class StudentManager(UserManager):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.STUDENT)
 
+    def create_superuser(self, email, password, **extra_fields):
+        pass
 
 class StudentDetails(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -124,10 +163,12 @@ class Student(User):
 # ---------------------------------------------------------------------------------------------
 
 
-class ParentManager(models.Manager):
+class ParentManager(UserManager):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.PARENT)
 
+    def create_superuser(self, email, password, **extra_fields):
+        pass
 
 class ParentDetails(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
