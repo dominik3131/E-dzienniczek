@@ -11,9 +11,6 @@ import background from "../../assets/background.jpg";
 import { loginPanel as backgroundPanelColor } from "../../styles/background";
 import readingBook from "../../assets/reading-book.png";
 import LoginForm from "../../components/LoginForm/LoginForm";
-import withLogin from "../../shared/withLogin";
-
-const LoginFormWithHandleErrorAndLoading = withLogin(LoginForm);
 
 const theme = createMuiTheme({
   overrides: {
@@ -65,7 +62,7 @@ const LoginPageContainer = () => {
             <Typography variant={matches ? "h3" : "h4"} className={classes.h2}>
               E-dzienniczek
             </Typography>
-            <LoginFormWithHandleErrorAndLoading />
+            <LoginForm />
           </Box>
         </Grid>
       </Grid>

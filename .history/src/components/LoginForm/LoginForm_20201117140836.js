@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockRoundedIcon from "@material-ui/icons/LockRounded";
-import { Button, TextField } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  TextField,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginForm = ({ errors, tryLogin, showErrors }) => {
+const LoginForm = (props) => {
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -32,8 +38,8 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
       <TextField
         id="username"
         name="username"
-        helperText={showErrors("email")}
-        error={errors.email.length > 0 || null}
+        helperText="error"
+        error={data.username.length === 0 ? "podany email nie istnieje" : null}
         label="Username"
         InputProps={{
           startAdornment: (
@@ -48,8 +54,8 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
         id="password"
         name="password"
         label="password"
-        error={errors.password.length > 0 || null}
-        helperText={showErrors("password")}
+        error={data.username.length === 0 ? "podany email nie istnieje" : null}
+        helperText="error"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -64,7 +70,7 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
         variant="contained"
         color="primary"
         className={classes.margin}
-        onClick={() => tryLogin({ ...data })}
+        onClick={() => props.tryLogin({ ...data })}
       >
         Zaloguj się
       </Button>

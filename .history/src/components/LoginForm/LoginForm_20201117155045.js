@@ -32,7 +32,7 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
       <TextField
         id="username"
         name="username"
-        helperText={showErrors("email")}
+        helperText="error"
         error={errors.email.length > 0 || null}
         label="Username"
         InputProps={{
@@ -49,7 +49,7 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
         name="password"
         label="password"
         error={errors.password.length > 0 || null}
-        helperText={showErrors("password")}
+        helperText={showErrors(errors.password)}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

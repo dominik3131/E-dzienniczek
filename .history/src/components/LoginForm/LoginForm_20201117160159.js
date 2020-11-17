@@ -32,7 +32,7 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
       <TextField
         id="username"
         name="username"
-        helperText={showErrors("email")}
+        helperText={<ul>{showErrors("email")}</ul>}
         error={errors.email.length > 0 || null}
         label="Username"
         InputProps={{

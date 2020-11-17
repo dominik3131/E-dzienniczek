@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginForm = ({ errors, tryLogin, showErrors }) => {
+const LoginForm = (props) => {
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -32,8 +32,8 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
       <TextField
         id="username"
         name="username"
-        helperText={showErrors("email")}
-        error={errors.email.length > 0 || null}
+        helperText="error"
+        error={props.errors.length > 0 || null}
         label="Username"
         InputProps={{
           startAdornment: (
@@ -48,8 +48,8 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
         id="password"
         name="password"
         label="password"
-        error={errors.password.length > 0 || null}
-        helperText={showErrors("password")}
+        error={props.errors.length > 0 || null}
+        helperText="error"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -64,7 +64,7 @@ const LoginForm = ({ errors, tryLogin, showErrors }) => {
         variant="contained"
         color="primary"
         className={classes.margin}
-        onClick={() => tryLogin({ ...data })}
+        onClick={() => props.tryLogin({ ...data })}
       >
         Zaloguj się
       </Button>
