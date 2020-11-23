@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { logout } from "../../../actions/auth";
+import { logout } from "../actions/auth";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -114,8 +114,7 @@ export default function MiniDrawer() {
     setOpen(false);
   };
   const logOut = () => {
-    dispatch(logout());
-    history.push("/users");
+    dispatch(logout()).then(() => history.push("/users"));
   };
 
   return (

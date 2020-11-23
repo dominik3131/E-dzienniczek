@@ -114,8 +114,7 @@ export default function MiniDrawer() {
     setOpen(false);
   };
   const logOut = () => {
-    dispatch(logout());
-    history.push("/users");
+    dispatch(logout()).then(() => history.push("/users"));
   };
 
   return (
