@@ -1,6 +1,10 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Box } from "@material-ui/core";
+import {
+  MuiThemeProvider,
+  createMuiTheme,
+  makeStyles,
+} from "@material-ui/core/styles";
+import { CssBaseline, Grid, Box } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Typography from "@material-ui/core/Typography";
 import background from "../../assets/background.jpg";
@@ -11,11 +15,20 @@ import withLogin from "../../shared/withLogin";
 
 const LoginFormWithHandleErrorAndLoading = withLogin(LoginForm);
 
-const useStyles = makeStyles((theme) => ({
-  provider: {
-    background: `url(${background}) no-repeat fixed left `,
-    backgroundSize: `100%`,
+const theme = createMuiTheme({
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          background: `url(${background}) no-repeat fixed left `,
+          backgroundSize: `100%`,
+        },
+      },
+    },
   },
+});
+
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
@@ -43,17 +56,20 @@ const LoginPageContainer = () => {
   const matches = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
   return (
-    <Grid container justify="flex-end" className={classes.provider}>
-      <Grid container item md={4} sm={6}>
-        <Box className={classes.root}>
-          <img className={classes.img} src={readingBook} alt="Logo" />
-          <Typography variant={matches ? "h3" : "h4"} className={classes.h2}>
-            E-dzienniczek
-          </Typography>
-          <LoginFormWithHandleErrorAndLoading />
-        </Box>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      <Grid container justify="flex-end">
+        <Grid container item md={4} sm={6}>
+          <Box className={classes.root}>
+            <img className={classes.img} src={readingBook} alt="Logo" />
+            <Typography variant={matches ? "h3" : "h4"} className={classes.h2}>
+              E-dzienniczek
+            </Typography>
+            <LoginFormWithHandleErrorAndLoading />
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
+    </MuiThemeProvider>
   );
 };
 

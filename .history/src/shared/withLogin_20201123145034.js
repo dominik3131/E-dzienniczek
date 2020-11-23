@@ -21,11 +21,10 @@ export default (Cmp) => {
       const newErrors = loginFieldsValidate(username, password);
       setErrors(newErrors);
       if (newErrors.email.length === 0 && newErrors.password.length === 0) {
-        dispatch(login(username, password))
-          .finally(() => setLoading(false))
-          .then(() => {
-            history.push("/users");
-          });
+        dispatch(login(username, password)).then(() => {
+          history.push("/users");
+        });
+        // setLoading(false);
       } else setLoading(false);
     };
 
