@@ -1,19 +1,22 @@
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.db.models import Q
+from rest_framework import permissions
+from rest_framework.generics import CreateAPIView
+from .serializers import *
+from .models import *
+from rest_framework import generics
 from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
-from rest_framework.decorators import  permission_classes,api_view
+from rest_framework.decorators import permission_classes, api_view
 from rest_auth.views import LoginView
+from .permissions import *
+from django.utils.decorators import method_decorator
+
 # Serve Single Page Application
 index = never_cache(TemplateView.as_view(template_name='index.html'))
 
-from rest_framework import generics
-from .models import *
-from .serializers import *
-from rest_framework.generics import CreateAPIView
-from rest_framework import permissions
-from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 class MethodSerializerView(object):
     '''
@@ -38,78 +41,126 @@ class MethodSerializerView(object):
 
         raise exceptions.MethodNotAllowed(self.request.method)
 
-class StudentsList(generics.ListCreateAPIView):
+
+class StudentsList(generics.ListAPIView):
     '''
     API: /api/students/
-    Method: GET/POST
+    Method: GET
     '''
+
+    permission_classes = (TeacherPermission | AdministratorPermission,)
     serializer_class = StudentSimpleSerializer
+
     def get_queryset(self):
         return Student.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save()
 
-class StudentDetail(MethodSerializerView,generics.RetrieveUpdateDestroyAPIView):
+class StudentDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
     '''
     API: /api/students/:student_id
     Method: GET/PUT/PATCH/DELETE
     '''
-    
+
+    permission_classes = (
+        (
+            SafeMethodPermission
+            & (
+                ParentOfChildPermission
+                | ExactUserPermission
+            )
+        )
+        | TeacherPermission
+        | AdministratorPermission,
+    )
+    serializer_class = StudentSerializer
     queryset = Student.objects.all()
     method_serializer_classes = {
-        ('GET', ): StudentDetailsSerializer,
-        ('PUT', 'PATCH'): StudentSimpleSerializer
+        ('GET', 'PUT', 'PATCH',): StudentSerializer,
     }
-    
 
-class ParentsList(generics.ListCreateAPIView):
+
+class ParentsList(generics.ListAPIView):
     '''
     API: /api/parents/
-    Method: GET/POST
+    Method: GET
     '''
+
+    permission_classes = (TeacherPermission | AdministratorPermission,)
     serializer_class = ParentSimpleSerializer
+
     def get_queryset(self):
         return Parent.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save()
 
-
-class ParentDetail(MethodSerializerView,generics.RetrieveUpdateDestroyAPIView):
+class ParentDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
     '''
     API: /api/parents/:parent_id
     Method: GET/PUT/PATCH/DELETE
     '''
+
+    permission_classes = (
+        (
+            SafeMethodPermission
+            & (
+                ChildOfParentPermission
+                | ExactUserPermission
+            )
+        )
+        | TeacherPermission
+        | AdministratorPermission,
+    )
     queryset = Parent.objects.all()
+    serializer_class = ParentSerializer
     method_serializer_classes = {
-        ('GET', ): ParentDetailsSerializer,
-        ('PUT', 'PATCH'): ParentSimpleSerializer
+        ('GET', 'PUT', 'PATCH',): ParentSerializer,
     }
 
-class TeachersList(generics.ListCreateAPIView):
+
+class ParentDetailsView(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
+    '''
+    API: /api/parents/:parent_id/details
+    Method: PUT
+    '''
+    queryset = Parent.objects.all()
+    method_serializer_classes = {
+        ('GET', 'PUT', 'PATCH', ): ParentDetailsSerializer,
+    }
+
+
+class TeachersList(generics.ListAPIView):
     '''
     API: /api/teachers/
-    Method: GET/POST
+    Method: GET
     '''
+
     serializer_class = TeacherSimpleSerializer
+
     def get_queryset(self):
         return Teacher.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save()
 
-
-class TeacherDetail(MethodSerializerView,generics.RetrieveUpdateDestroyAPIView):
+class TeacherDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
     '''
     API: /api/teachers/:teacher_id
     Method: GET/PUT/PATCH/DELETE
     '''
+
+    permission_classes = (
+        (
+            SafeMethodPermission
+            & (
+                StudentPermission
+                | ParentPermission
+            )
+        )
+        | ExactUserPermission
+        | AdministratorPermission,
+    )
     queryset = Teacher.objects.all()
     method_serializer_classes = {
-        ('GET', ): TeacherDetailsSerializer,
-        ('PUT', 'PATCH'): TeacherSimpleSerializer
+        ('GET', 'PUT', 'PATCH', ): TeacherSerializer,
     }
+
 
 class SubjectsList(generics.ListCreateAPIView):
     '''
@@ -117,6 +168,7 @@ class SubjectsList(generics.ListCreateAPIView):
     Method: GET/POST
     '''
     serializer_class = SubjectSimpleSerializer
+
     def get_queryset(self):
         return Subject.objects.all()
 
@@ -139,6 +191,7 @@ class SchoolClassList(generics.ListCreateAPIView):
     Method: GET/POST
     '''
     serializer_class = SchoolClassSimpleSerializer
+
     def get_queryset(self):
         return SchoolClass.objects.all()
 
@@ -146,30 +199,28 @@ class SchoolClassList(generics.ListCreateAPIView):
         serializer.save()
 
 
-class SchoolClassDetail(MethodSerializerView,generics.RetrieveUpdateDestroyAPIView):
+class SchoolClassDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
     '''
     API: /api/classes/:class_id
     Method: GET/PUT/PATCH/DELETE
     '''
     queryset = SchoolClass.objects.all()
     method_serializer_classes = {
-        ('GET', ): SchoolClassDetailsSerializer,
-        ('PUT', 'PATCH'): SchoolClassSimpleSerializer
+        ('GET', 'PUT', 'PATCH', ): SchoolClassSerializer,
     }
+
 
 class CreateUserView(CreateAPIView):
 
     model = get_user_model()
-    permission_classes = [
-        permissions.AllowAny # Or anon users can't register
-    ]
+    permission_classes = (UserCreatePermission,)
     serializer_class = UserSerializer
 
+
 class CustomLoginView(LoginView):
-    @csrf_exempt
+    @ csrf_exempt
     def get_response(self):
         orginal_response = super().get_response()
-        mydata = {"message": "some message", "status": "success"}
+        mydata = {"message": "Login success", "status": "success"}
         orginal_response.data.update(mydata)
         return orginal_response
-
