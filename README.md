@@ -30,16 +30,16 @@ Enters virtual enviroment
 
 ### All below commands need to be used in virtual enviroment
 
-### `poetry install`
+### `pip install -r requirement.txt`
 Installs required dependencies from requirements.txt for virtual enviroment
-Run every time after `git pull`
+Run every time after `git pull` if file `requirement.txt` changed
 
-### `poetry add <package_name>`
+### `pip install <package_name>`
 Installs new package
 
 ### `pip freeze > requirements.txt`
 Saves dependencies from virtual enviroment to requirements.txt
-Run always after `poetry add <package_name>`
+Run always after `pip install <package_name>`
 
 ### `python manage.py runserver`
 Starts backend
