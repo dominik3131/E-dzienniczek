@@ -104,24 +104,36 @@ class ParentSimpleSerializer(CustomSerializer):
         extra_kwargs = {'email': {'required': False}}
 
 
+class TeacherDetailsSerializer(CustomSerializer):
+
+    class Meta:
+        model = StudentDetails
+        fields = []
+
 class TeacherSerializer(CustomSerializer):
-    subjects = SubjectSimpleSerializer(many=True, read_only=True)
+    details = TeacherDetailsSerializer(many=False, read_only=True)
 
     class Meta:
         model = Teacher
         fields = ("id", "email", "first_name", "last_name", "type")
-        extra_fields = ['subjects']
+        extra_kwargs = {'email': {'required': False}}
 
 
-class StudentSerializer(CustomSerializer):
+class StudentDetailsSerializer(CustomSerializer):
+    schoolClass = SchoolClassSimpleSerializer(many=False)
     parents = ParentSimpleSerializer(many=True, read_only=True)
-    schoolClass = SchoolClassSimpleSerializer(many=False, read_only=True)
     grades = GradeSimpleSerializer(many=True, read_only=True)
 
     class Meta:
+        model = StudentDetails
+        fields = ["schoolClass", "parents", "grades"]
+
+class StudentSerializer(CustomSerializer):
+    details = StudentDetailsSerializer(many=False)
+    class Meta:
         model = Student
-        fields = ("id", "email", "first_name", "last_name", "type")
-        extra_fields = ['parents', 'schoolClass', 'grades']
+        fields = ["id", "email", "first_name", "last_name", "type", "details"]
+        extra_kwargs = {'email': {'required': False}}
 
 
 class ParentDetailsSerializer(CustomSerializer):
@@ -152,16 +164,6 @@ class ParentSerializer(CustomSerializer):
                 details.children.set(children_ids)
                 details.save()
         return instance
-
-
-class ParentDetailsSerializer(CustomSerializer):
-    children = StudentSimpleSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = ParentDetails
-        fields = ('children',)
-        extra_kwargs = {'children': {'required': False}}
-
 
 class GradeSerializer(CustomSerializer):
     student = StudentSimpleSerializer(many=False, read_only=True)

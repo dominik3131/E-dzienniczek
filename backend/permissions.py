@@ -63,4 +63,4 @@ class UserCreatePermission(BasePermission):
     def has_permission(self, request, view):
 
         # check if user has permission for specific user type creation
-        return request.user.type=="ADMINISTRATOR" or (request.user.type=="TEACHER" and request.data.type != "ADMINISTRATOR")
+        return request.user.type=="ADMINISTRATOR" or (request.user.type=="TEACHER" and request.data.type != "ADMINISTRATOR" and request.data.type != "TEACHER")

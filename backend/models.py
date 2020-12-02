@@ -32,6 +32,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('type', "ADMINISTRATOR")
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError(_('Superuser must have is_staff=True.'))
@@ -145,6 +146,14 @@ class StudentDetails(models.Model):
     schoolClass = models.ForeignKey(
         SchoolClass, related_name="student_class", null=True, blank=True, on_delete=models.SET_NULL)
 
+    @property
+    def parents(self):
+        return Parent.objects.all().filter(parentdetails__children__id__in=[self.user_id])
+        
+    @property
+    def grades(self):
+        return Grade.objects.all().filter(student__id=self.user_id)
+
 
 class Student(User):
     base_type = User.Types.STUDENT
@@ -205,9 +214,9 @@ class Subject(models.Model):
 
 
 class Grade(models.Model):
-    student_id = models.ForeignKey(
+    student = models.ForeignKey(
         Student, related_name='Student', on_delete=models.CASCADE)
-    subject_id = models.ForeignKey(
+    subject = models.ForeignKey(
         Subject, related_name='Subject', on_delete=models.CASCADE)
     value = models.PositiveSmallIntegerField(
         default=5, validators=[MaxValueValidator(6), MinValueValidator(1)])
