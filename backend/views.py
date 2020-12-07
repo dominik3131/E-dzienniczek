@@ -210,6 +210,13 @@ class SchoolClassDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIV
     }
 
 
+class CreateGradeView(CreateAPIView, generics.UpdateAPIView):
+
+    model = Grade
+    serializer_class = GradeSimpleSerializer
+    permission_classes = (AdministratorPermission | TeacherPermission, )
+
+
 class CreateUserView(CreateAPIView):
 
     model = get_user_model()

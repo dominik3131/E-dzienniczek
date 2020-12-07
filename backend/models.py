@@ -202,10 +202,10 @@ class Parent(User):
 
 
 class Subject(models.Model):
-    teacher_id = models.ForeignKey(
+    teacher = models.ForeignKey(
         Teacher, related_name='Teacher', null=True, blank=True, on_delete=models.SET_NULL)
-    school_class_id = models.ForeignKey(
-        SchoolClass, related_name='school_class', null=True, blank=True, on_delete=models.SET_NULL)
+    schoolClass = models.ForeignKey(
+        SchoolClass, related_name='schoolClass', null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=100)
 
 # ---------------------------------------------------------------------------------------------
@@ -220,3 +220,5 @@ class Grade(models.Model):
         Subject, related_name='Subject', on_delete=models.CASCADE)
     value = models.PositiveSmallIntegerField(
         default=5, validators=[MaxValueValidator(6), MinValueValidator(1)])
+    description = models.CharField(max_length=100, default='grade')
+    

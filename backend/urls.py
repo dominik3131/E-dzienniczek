@@ -32,10 +32,12 @@ urlpatterns = [
     path('api/teachers', TeachersList.as_view()),
     path('api/teachers/<int:pk>', TeacherDetail.as_view()),
 
+    path('api/grades', CreateGradeView.as_view()),
+
     path('api/subjects', SubjectsList.as_view()),
     path('api/subjects/<int:pk>', SubjectDetail.as_view()),
 
-    path('api/classes', SchoolClassDetail.as_view()),
+    path('api/classes', SchoolClassList.as_view()),
     path('api/classes/<int:pk>', SchoolClassDetail.as_view()),
 
     path('api/o', include('oauth2_provider.urls', namespace='oauth2_provider')),
