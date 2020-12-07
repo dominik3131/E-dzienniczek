@@ -76,6 +76,7 @@ class SchoolClassSimpleSerializer(CustomSerializer):
     class Meta:
         model = SchoolClass
         fields = '__all__'
+        extra_kwargs = {'title': {'required': False}}
 
 
 class AdministratorSimpleSerializer(CustomSerializer):
@@ -110,6 +111,7 @@ class TeacherDetailsSerializer(CustomSerializer):
         model = StudentDetails
         fields = []
 
+
 class TeacherSerializer(CustomSerializer):
     details = TeacherDetailsSerializer(many=False, read_only=True)
 
@@ -128,12 +130,27 @@ class StudentDetailsSerializer(CustomSerializer):
         model = StudentDetails
         fields = ["schoolClass", "parents", "grades"]
 
+
 class StudentSerializer(CustomSerializer):
     details = StudentDetailsSerializer(many=False)
+
     class Meta:
         model = Student
         fields = ["id", "email", "first_name", "last_name", "type", "details"]
         extra_kwargs = {'email': {'required': False}}
+
+    def update(self, instance, validated_data):
+        validated_data.pop('details', {})
+        details = instance.details
+        details_data = self.context['request'].data['details']
+        instance = super().update(instance, validated_data)
+        if details_data:
+            schoolClass = details_data['schoolClass']
+            if schoolClass:
+                schoolClassID = schoolClass['id']
+                details.schoolClass_id = schoolClassID
+                details.save()
+        return instance
 
 
 class ParentDetailsSerializer(CustomSerializer):
@@ -164,6 +181,7 @@ class ParentSerializer(CustomSerializer):
                 details.children.set(children_ids)
                 details.save()
         return instance
+
 
 class GradeSerializer(CustomSerializer):
     student = StudentSimpleSerializer(many=False, read_only=True)
