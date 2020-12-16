@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
+
 class UserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -141,6 +142,7 @@ class StudentManager(UserManager):
     def create_superuser(self, email, password, **extra_fields):
         pass
 
+
 class StudentDetails(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     schoolClass = models.ForeignKey(
@@ -149,7 +151,7 @@ class StudentDetails(models.Model):
     @property
     def parents(self):
         return Parent.objects.all().filter(parentdetails__children__id__in=[self.user_id])
-        
+
     @property
     def grades(self):
         return Grade.objects.all().filter(student__id=self.user_id)
@@ -178,6 +180,7 @@ class ParentManager(UserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         pass
+
 
 class ParentDetails(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -221,4 +224,14 @@ class Grade(models.Model):
     value = models.PositiveSmallIntegerField(
         default=5, validators=[MaxValueValidator(6), MinValueValidator(1)])
     description = models.CharField(max_length=100, default='grade')
-    
+
+# ---------------------------------------------------------------------------------------------
+# ----------------------------------------Announcement----------------------------------------
+# ---------------------------------------------------------------------------------------------
+
+
+class Announcement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=2000)
+    date = models.DateTimeField(editable=False)

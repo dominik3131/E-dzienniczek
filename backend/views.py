@@ -13,6 +13,7 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_auth.views import LoginView
 from .permissions import *
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 # Serve Single Page Application
 index = never_cache(TemplateView.as_view(template_name='index.html'))
@@ -215,6 +216,30 @@ class CreateGradeView(CreateAPIView, generics.UpdateAPIView):
     model = Grade
     serializer_class = GradeSimpleSerializer
     permission_classes = (AdministratorPermission | TeacherPermission, )
+
+
+class AnnouncementsList(generics.ListCreateAPIView):
+
+    serializer_class = AnnouncementSerializer
+    permission_classes = (SafeMethodPermission |
+                          TeacherPermission | AdministratorPermission,)
+
+    def get_queryset(self):
+        return Announcement.objects.all().order_by('-date')
+
+    def perform_create(self, serializer):
+        self.request.data['user'] = self.request.user.id
+        serializer.save()
+
+
+class AnnouncementsLatestList(generics.ListAPIView):
+
+    serializer_class = AnnouncementSerializer
+    permission_classes = (SafeMethodPermission |
+                          TeacherPermission | AdministratorPermission,)
+
+    def get_queryset(self):
+        return Announcement.objects.all().order_by('-date')[:3]
 
 
 class CreateUserView(CreateAPIView):
