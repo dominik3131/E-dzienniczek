@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import *
 from .models import User as BackendUser
+from django.utils import timezone
 
 UserModel = get_user_model()
 
@@ -43,6 +44,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ("id", "password", "email", "first_name", "last_name", "type")
+
+
+class UserSimpleSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        pass
+
+    class Meta:
+        model = UserModel
+        fields = ("id", "email", "first_name", "last_name", "type")
 
 
 class CustomSerializer(serializers.ModelSerializer):
@@ -201,3 +211,32 @@ class SchoolClassSerializer(CustomSerializer):
         model = SchoolClass
         fields = '__all__'
         extra_fields = ['students', 'subjects']
+
+
+class AnnouncementSerializer(CustomSerializer):
+    user = UserSimpleSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Announcement
+        fields = '__all__'
+        extra_kwargs = {'attachment': {'required': False}}
+
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        user = None
+        attachment = None
+        if request:
+            user = request.user
+            attachment = request.FILES.get('file')
+
+        announcement = Announcement.objects.create(
+            title = validated_data['title'],
+            content = validated_data['content'],
+            user = user,
+            date = timezone.now(),
+            attachment = attachment
+        )
+
+        announcement.save()
+
+        return announcement

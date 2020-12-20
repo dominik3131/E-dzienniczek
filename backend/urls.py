@@ -40,6 +40,9 @@ urlpatterns = [
     path('api/classes', SchoolClassList.as_view()),
     path('api/classes/<int:pk>', SchoolClassDetail.as_view()),
 
+    path('api/announcements', AnnouncementsList.as_view()),
+    path('api/announcements/latest', AnnouncementsLatestList.as_view()),
+
     path('api/o', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api/users/create', CreateUserView.as_view()),
     path('api/login',CustomLoginView.as_view(),name = 'login'),
