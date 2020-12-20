@@ -228,6 +228,7 @@ class AnnouncementsList(generics.ListCreateAPIView):
         return Announcement.objects.all().order_by('-date')
 
     def perform_create(self, serializer):
+        self.request.data._mutable = True
         self.request.data['user'] = self.request.user.id
         serializer.save()
 
