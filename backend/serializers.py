@@ -219,20 +219,22 @@ class AnnouncementSerializer(CustomSerializer):
     class Meta:
         model = Announcement
         fields = '__all__'
-        extra_kwargs = {'date': {'required': False},
-                        'user': {'required': False}}
+        extra_kwargs = {'attachment': {'required': False}}
 
     def create(self, validated_data):
         request = self.context.get('request', None)
         user = None
+        attachment = None
         if request:
             user = request.user
+            attachment = request.FILES.get('file')
 
         announcement = Announcement.objects.create(
             title = validated_data['title'],
             content = validated_data['content'],
             user = user,
             date = timezone.now(),
+            attachment = attachment
         )
 
         announcement.save()

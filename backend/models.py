@@ -235,3 +235,4 @@ class Announcement(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=2000)
     date = models.DateTimeField(editable=False)
+    attachment = models.FileField(blank=True, default='')
