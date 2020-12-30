@@ -240,3 +240,44 @@ class AnnouncementSerializer(CustomSerializer):
         announcement.save()
 
         return announcement
+
+
+class MessageSerializer(CustomSerializer):
+    sender = UserSimpleSerializer(many=False, read_only=True)
+    receiver = UserSimpleSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Message
+        fields = '__all__'
+        extra_kwargs = {'sender': {'required': False}}
+
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        sender = None
+        receiver = None
+        if request:
+            sender = request.user
+            receiver = User.objects.get(id=request.data['receiver'])
+        
+        message = Message.objects.create(
+            title = validated_data['title'],
+            content = validated_data['content'],
+            receiver = receiver,
+            sender = sender,
+            date = timezone.now(),
+        )
+
+        message.save()
+
+        return message
+
+class MessageMarkAsReadSerializer(CustomSerializer):
+
+    class Meta:
+        model = Message
+        fields = []
+
+    def update(self, instance, validated_data):
+        instance.read = True
+        instance.save()
+        return instance

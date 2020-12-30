@@ -43,7 +43,13 @@ urlpatterns = [
     path('api/announcements', AnnouncementsList.as_view()),
     path('api/announcements/latest', AnnouncementsLatestList.as_view()),
 
+    path('api/messages', SendMessageView.as_view()),
+    path('api/messages/<int:pk>/markAsRead', MarkMessageAsReadView.as_view()),
+    path('api/messages/sent', SentMessageList.as_view()),
+    path('api/messages/received', ReceivedMessageList.as_view()),
+
     path('api/o', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('api/users', UsersList.as_view()),
     path('api/users/create', CreateUserView.as_view()),
     path('api/login',CustomLoginView.as_view(),name = 'login'),
     path('api/logout',LogoutView.as_view(),name='logout'),
