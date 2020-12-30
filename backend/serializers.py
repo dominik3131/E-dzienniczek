@@ -248,7 +248,7 @@ class MessageSerializer(CustomSerializer):
 
     class Meta:
         model = Message
-        fields = ["title", "content", "receiver", "sender", "date"]
+        fields = '__all__'
         extra_kwargs = {'sender': {'required': False}}
 
     def create(self, validated_data):
@@ -270,3 +270,14 @@ class MessageSerializer(CustomSerializer):
         message.save()
 
         return message
+
+class MessageMarkAsReadSerializer(CustomSerializer):
+
+    class Meta:
+        model = Message
+        fields = []
+
+    def update(self, instance, validated_data):
+        instance.read = True
+        instance.save()
+        return instance

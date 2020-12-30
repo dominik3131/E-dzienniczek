@@ -288,6 +288,14 @@ class SendMessageView(generics.CreateAPIView):
     serializer_class = MessageSerializer
 
     def perform_create(self, serializer):
-        # self.request.data._mutable = True
         self.request.data['sender'] = self.request.user
         serializer.save()
+
+class MarkMessageAsReadView(generics.UpdateAPIView):
+
+    permission_classes = (MessageReceiverPermission,)
+
+    def get_queryset(self):
+        return Message.objects.all()
+
+    serializer_class = MessageMarkAsReadSerializer

@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/announcements/latest', AnnouncementsLatestList.as_view()),
 
     path('api/messages', SendMessageView.as_view()),
+    path('api/messages/<int:pk>/markAsRead', MarkMessageAsReadView.as_view()),
     path('api/messages/sent', SentMessageList.as_view()),
     path('api/messages/received', ReceivedMessageList.as_view()),
 
