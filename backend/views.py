@@ -249,6 +249,13 @@ class CreateUserView(CreateAPIView):
     permission_classes = (UserCreatePermission,)
     serializer_class = UserSerializer
 
+class UsersList(generics.ListAPIView):
+
+    serializer_class = UserSimpleSerializer
+    permission_classes = (SafeMethodPermission)
+
+    def get_queryset(self):
+        return User.objects.all()
 
 class CustomLoginView(LoginView):
     @ csrf_exempt
@@ -257,3 +264,30 @@ class CustomLoginView(LoginView):
         mydata = {"message": "Login success", "status": "success"}
         orginal_response.data.update(mydata)
         return orginal_response
+
+
+class SentMessageList(generics.ListAPIView):
+
+    serializer_class = MessageSerializer
+    permission_classes = (SafeMethodPermission,)
+
+    def get_queryset(self):
+        return Message.objects.all().filter(sender=self.request.user).order_by('-date')
+
+
+class ReceivedMessageList(generics.ListAPIView):
+
+    serializer_class = MessageSerializer
+    permission_classes = (SafeMethodPermission,)
+
+    def get_queryset(self):
+        return Message.objects.all().filter(receiver=self.request.user).order_by('-date')
+
+class SendMessageView(generics.CreateAPIView):
+
+    serializer_class = MessageSerializer
+
+    def perform_create(self, serializer):
+        # self.request.data._mutable = True
+        self.request.data['sender'] = self.request.user
+        serializer.save()

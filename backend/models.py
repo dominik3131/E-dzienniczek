@@ -236,3 +236,16 @@ class Announcement(models.Model):
     content = models.CharField(max_length=2000)
     date = models.DateTimeField(editable=False)
     attachment = models.FileField(blank=True, default='')
+
+
+# ---------------------------------------------------------------------------------------------
+# ----------------------------------------Message----------------------------------------------
+# ---------------------------------------------------------------------------------------------
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='receiver')
+    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=2000)
+    date = models.DateTimeField(editable=False)
