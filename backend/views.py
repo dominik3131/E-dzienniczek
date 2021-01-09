@@ -14,7 +14,7 @@ from rest_auth.views import LoginView
 from .permissions import *
 from django.utils.decorators import method_decorator
 from django.utils import timezone
-
+from django.core import serializers
 # Serve Single Page Application
 index = never_cache(TemplateView.as_view(template_name='index.html'))
 
@@ -249,6 +249,7 @@ class CreateUserView(CreateAPIView):
     permission_classes = (UserCreatePermission,)
     serializer_class = UserSerializer
 
+
 class UsersList(generics.ListAPIView):
 
     serializer_class = UserSimpleSerializer
@@ -257,12 +258,25 @@ class UsersList(generics.ListAPIView):
     def get_queryset(self):
         return User.objects.all()
 
+
 class CustomLoginView(LoginView):
     @ csrf_exempt
     def get_response(self):
+
+        # assuming obj is a model instance
         orginal_response = super().get_response()
-        mydata = {"message": "Login success", "status": "success"}
-        orginal_response.data.update(mydata)
+        extraData = {
+            "message": "Login success",
+            "status": "success",
+            "user": {
+                "id": self.user.id,
+                "type": self.user.type,
+                "first_name": self.user.first_name,
+                "last_name": self.user.last_name,
+                "email": self.user.email,
+            }
+        }
+        orginal_response.data.update(extraData)
         return orginal_response
 
 
@@ -283,6 +297,7 @@ class ReceivedMessageList(generics.ListAPIView):
     def get_queryset(self):
         return Message.objects.all().filter(receiver=self.request.user).order_by('-date')
 
+
 class SendMessageView(generics.CreateAPIView):
 
     serializer_class = MessageSerializer
@@ -290,6 +305,7 @@ class SendMessageView(generics.CreateAPIView):
     def perform_create(self, serializer):
         self.request.data['sender'] = self.request.user
         serializer.save()
+
 
 class MarkMessageAsReadView(generics.UpdateAPIView):
 
