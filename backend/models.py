@@ -129,6 +129,12 @@ class Teacher(User):
 class SchoolClass(models.Model):
     title = models.CharField(max_length=100)
 
+    def get_subjects(self):
+        return Subject.objects.filter(schoolClass=self)
+
+    def get_students(self):
+        return Student.objects.filter(studentdetails__schoolClass=self)
+
 
 # ---------------------------------------------------------------------------------------------
 # ----------------------------------------STUDENT----------------------------------------------

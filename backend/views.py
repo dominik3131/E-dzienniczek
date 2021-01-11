@@ -211,6 +211,22 @@ class SchoolClassDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIV
     }
 
 
+class SchoolClassStudentList(generics.ListAPIView):
+
+    serializer_class = StudentSimpleSerializer
+
+    def get_queryset(self):
+        return Student.objects.filter(studentdetails__schoolClass__id=self.kwargs['pk'])
+
+
+class SchoolClassSubjectList(generics.ListAPIView):
+
+    serializer_class = SubjectSimpleSerializer
+
+    def get_queryset(self):
+        return Subject.objects.filter(schoolClass__id=self.kwargs['pk'])
+
+
 class CreateGradeView(CreateAPIView, generics.UpdateAPIView):
 
     model = Grade
