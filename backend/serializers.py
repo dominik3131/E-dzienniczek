@@ -204,13 +204,13 @@ class GradeSerializer(CustomSerializer):
 
 
 class SchoolClassSerializer(CustomSerializer):
-    students = StudentSimpleSerializer(many=True, read_only=True)
-    subjects = SubjectSimpleSerializer(many=True, read_only=True)
+    students = StudentSimpleSerializer(many=True, read_only=True, source='get_students')
+    subjects = SubjectSimpleSerializer(many=True, read_only=True,source='get_subjects')
 
     class Meta:
         model = SchoolClass
-        fields = '__all__'
-        extra_fields = ['students', 'subjects']
+        fields = ["id", "title", "subjects", "students"]
+        extra_kwargs = {'id': {'required': False}}
 
 
 class AnnouncementSerializer(CustomSerializer):

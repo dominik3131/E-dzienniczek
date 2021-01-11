@@ -30,7 +30,7 @@ Enters virtual enviroment
 
 ### All below commands need to be used in virtual enviroment
 
-### `pip install -r requirement.txt`
+### `pip install -r requirements.txt`
 Installs required dependencies from requirements.txt for virtual enviroment
 Run every time after `git pull` if file `requirement.txt` changed
 

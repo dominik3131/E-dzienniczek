@@ -39,6 +39,8 @@ urlpatterns = [
 
     path('api/classes', SchoolClassList.as_view()),
     path('api/classes/<int:pk>', SchoolClassDetail.as_view()),
+    path('api/classes/<int:pk>/subjects', SchoolClassSubjectList.as_view()),
+    path('api/classes/<int:pk>/students', SchoolClassStudentList.as_view()),
 
     path('api/announcements', AnnouncementsList.as_view()),
     path('api/announcements/latest', AnnouncementsLatestList.as_view()),
