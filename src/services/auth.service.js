@@ -1,5 +1,5 @@
 import axios from "axios";
-import { loginApiUrl } from "../helpers/routes";
+import { loginApiUrl, logoutApiUrl } from "../helpers/routes";
 
 class AuthService {
   async login(username, password) {
@@ -13,8 +13,13 @@ class AuthService {
       });
   }
 
-  logout() {
-    localStorage.removeItem("user");
+  async logout() {
+    return await axios
+      .post(`${logoutApiUrl()}`)
+      .then((response) => {
+        localStorage.removeItem("user");
+        return response.data;
+      })
   }
 }
 

@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux"
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useStyles } from '../../../styles/subjects';
+import { getAllSubjects } from '../../../helpers/api/SubjectApi';
 
-
-export default function Subjects() {
+const Subjects = () => {
   const classes = useStyles();
+  const userClass = useSelector(state => state.user.user.details.schoolClass.id);
+  const [subjects, setSubjects] = useState({});
 
+  const filterSubjectsByUserClass = (table, num) => 
+    {
+      console.log(table);
+      // table.map(el => console.log(el.schoolClass));
+      // const result = table.filter(el => el.schoolClass == num);
+    }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getAllSubjects();
+      setSubjects(response);
+     }
+     fetchData();
+  }, [])
+  
   return (
     <div className={classes.root}>
       <Accordion>
@@ -54,3 +72,5 @@ export default function Subjects() {
     </div>
   );
 }
+
+export default Subjects;
