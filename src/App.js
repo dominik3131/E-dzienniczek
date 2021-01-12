@@ -19,7 +19,7 @@ function App() {
           <Route exact path={["/", "/login"]}>
             {authKey ? <Redirect to="/users" /> : <LoginPageContainer />}
           </Route>
-          <Route exact path="/users">
+          <Route path="/users">
             {authKey ? <MainUserPageContainer /> : <Redirect to="/" />}
           </Route>
         </Switch>

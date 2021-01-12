@@ -7,7 +7,7 @@ import {
 } from "./types";
 import AuthService from "../services/auth.service";
 
-export const login = (username, password) => (dispatch) => {
+export const login = (username, password) => dispatch => {
   return AuthService.login(username, password).then(
     (data) => {
       dispatch({
@@ -41,7 +41,7 @@ export const login = (username, password) => (dispatch) => {
   );
 };
 
-export const logout = () => (dispatch) => {
+export const logout = () => dispatch => {
   AuthService.logout();
   dispatch({
     type: LOGOUT,
