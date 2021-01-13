@@ -200,7 +200,7 @@ class GradeSerializer(CustomSerializer):
     class Meta:
         model = Grade
         fields = '__all__'
-        extra_fields = ['student', 'subject']
+        extra_kwargs = {'id': {'required': False},'firstRetakeValue': {'required': False},'secondRetakeValue': {'required': False}}
 
 
 class SchoolClassSerializer(CustomSerializer):

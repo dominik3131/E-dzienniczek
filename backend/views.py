@@ -227,12 +227,20 @@ class SchoolClassSubjectList(generics.ListAPIView):
         return Subject.objects.filter(schoolClass__id=self.kwargs['pk'])
 
 
-class CreateGradeView(CreateAPIView, generics.UpdateAPIView):
+class CreateGradeView(CreateAPIView):
 
     model = Grade
     serializer_class = GradeSimpleSerializer
     permission_classes = (AdministratorPermission | TeacherPermission, )
 
+class UpdateGradeView(generics.UpdateAPIView):
+
+    model = Grade
+    serializer_class = GradeSerializer
+    permission_classes = (AdministratorPermission | TeacherPermission, )
+
+    def get_queryset(self):
+        return Grade.objects.all()
 
 class AnnouncementsList(generics.ListCreateAPIView):
 
