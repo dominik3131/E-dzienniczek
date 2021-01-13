@@ -1,6 +1,5 @@
 import axios from "axios";
 import authHeader from "../../services/auth-header";
-import { localServerUrl } from "../routes";
 
 export default axios.create({
   xsrfCookieName: 'csrftoken',
