@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import Subjects from "../Subjects/Subjects";
+import Messages from "../Messages/Messages";
 
 const Student = () => {
     const { path } = useRouteMatch();
@@ -16,9 +17,7 @@ const Student = () => {
             <Route path={`${path}/announcements`} exact>
                 <div>Komponent announcements</div>
             </Route>
-            <Route path={`${path}/messages`} exact>
-                <div>Komponent messages</div>
-            </Route>
+            <Route path={`${path}/messages`} exact component={Messages} />
         </Switch>
     );
 }

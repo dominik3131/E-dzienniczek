@@ -38,7 +38,11 @@ export default function MiniDrawer() {
           {title: "Przedmioty i oceny", url: "/subjects"},
           {title: "Ankiety", url: "/polls"},
           {title: "Ogłoszenia", url: "/announcements"},
-          {title: "Wiadomości", url: "/messages"}
+          {
+            title: "Wiadomości", 
+            url: "/messages",
+            submenu: ["Nowa wiadomość", "Wysłane", "Odebrane"]
+          }
         ];
         setUserMenuPositions(sidebarMenu);
         break;

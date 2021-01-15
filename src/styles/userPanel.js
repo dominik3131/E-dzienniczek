@@ -74,4 +74,7 @@ export const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
 }));
