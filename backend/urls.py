@@ -33,12 +33,15 @@ urlpatterns = [
     path('api/teachers/<int:pk>', TeacherDetail.as_view()),
 
     path('api/grades', CreateGradeView.as_view()),
+    path('api/grades/<int:pk>', UpdateGradeView.as_view()),
 
     path('api/subjects', SubjectsList.as_view()),
     path('api/subjects/<int:pk>', SubjectDetail.as_view()),
 
     path('api/classes', SchoolClassList.as_view()),
     path('api/classes/<int:pk>', SchoolClassDetail.as_view()),
+    path('api/classes/<int:pk>/subjects', SchoolClassSubjectList.as_view()),
+    path('api/classes/<int:pk>/students', SchoolClassStudentList.as_view()),
 
     path('api/announcements', AnnouncementsList.as_view()),
     path('api/announcements/latest', AnnouncementsLatestList.as_view()),

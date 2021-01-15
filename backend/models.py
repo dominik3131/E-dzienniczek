@@ -129,6 +129,12 @@ class Teacher(User):
 class SchoolClass(models.Model):
     title = models.CharField(max_length=100)
 
+    def get_subjects(self):
+        return Subject.objects.filter(schoolClass=self)
+
+    def get_students(self):
+        return Student.objects.filter(studentdetails__schoolClass=self)
+
 
 # ---------------------------------------------------------------------------------------------
 # ----------------------------------------STUDENT----------------------------------------------
@@ -223,6 +229,10 @@ class Grade(models.Model):
         Subject, related_name='Subject', on_delete=models.CASCADE)
     value = models.PositiveSmallIntegerField(
         default=5, validators=[MaxValueValidator(6), MinValueValidator(1)])
+    firstRetakeValue = models.PositiveSmallIntegerField(
+        default=None, null=True, validators=[MaxValueValidator(6), MinValueValidator(1)])
+    secondRetakeValue = models.PositiveSmallIntegerField(
+        default=None, null=True, validators=[MaxValueValidator(6), MinValueValidator(1)])
     description = models.CharField(max_length=100, default='grade')
 
 # ---------------------------------------------------------------------------------------------
