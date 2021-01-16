@@ -8,7 +8,7 @@ export default (Cmp) => {
     };
     logIn = ({ username, password }) => {
       axios
-        .post("https://e-dzienniczek.herokuapp.com/api/login", {
+        .post("/api/login", {
           username: username,
           password: password,
         })

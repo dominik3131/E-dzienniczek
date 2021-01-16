@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const get = async (url) => {
-  // const response = await axios.post("https://e-dzienniczek.herokuapp.com/api/login", {
+  // const response = await axios.post("/api/login", {
   //       username: username,
   //       password: password,
   //     })

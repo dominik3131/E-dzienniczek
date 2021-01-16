@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import LoginPageContainer from "./containers/LoginPageContainer";
 import MainUserPageContainer from "./containers/LoginPageContainer/MainUserPageContainer";
+import AnnouncementList from "./components/Announcement/AnnouncementList";
 import { useUserLoggedIn } from "./services/useUserLoggedIn";
 import { history } from "./helpers/history";
 
@@ -21,6 +22,9 @@ function App() {
           </Route>
           <Route exact path="/users">
             {authKey ? <MainUserPageContainer /> : <Redirect to="/" />}
+          </Route>
+          <Route exact path="/announcements">
+            {authKey ? <AnnouncementList /> : <Redirect to="/" />}
           </Route>
         </Switch>
       </Router>

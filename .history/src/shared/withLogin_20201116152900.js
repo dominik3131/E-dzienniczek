@@ -9,7 +9,7 @@ export default (Cmp) => {
     const logIn = ({ username, password }) => {
       setLoading(true);
       axios
-        .post("https://e-dzienniczek.herokuapp.com/api/login", {
+        .post("/api/login", {
           username: username,
           password: password,
         })
