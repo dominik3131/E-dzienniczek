@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function AnnouncementList() {
+export default function AnnouncementList(props) {
 
     const classes = useStyles();
     // TODO initial state as []
@@ -66,7 +66,7 @@ export default function AnnouncementList() {
     useEffect(() => {
         // TODO fetching announcements when component activates
         // using api/announcements if props.onlyLatest is false
-        // using api/announcements otherwise
+        // using api/announcements/latest otherwise
         setLoading(false);
     }, []);
 
