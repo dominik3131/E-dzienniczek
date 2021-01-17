@@ -6,15 +6,22 @@ import TextField from '@material-ui/core/TextField';
 import authHeader from "../../services/auth-header";
 import Button from '@material-ui/core/Button';
 import { Alert, AlertTitle } from '@material-ui/lab'
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 
 const useStyles = makeStyles(() => ({
     root: {
         minWidth: 320,
         maxWidth: 820,
         padding: 10,
+        margin: 10
     },
     inputContainer: {
         padding: 10
+    },
+    textField: {
+        width: "100%"
     }
 }));
 
@@ -99,24 +106,50 @@ export default function AnnouncementCreateForm() {
     }
 
     return (
-        <div>
+        <Card className={classes.root}>
+            <CardHeader
+                title="Ogłoszenie"
+                subheader="Stwórz ogłoszenie podając jego tytuł i zawartość. Opcjonalnie możesz dodać załącznik."
+            />
             <SubmitAlert></SubmitAlert>
-            <form onSubmit={handleSubmit}>
-                <div className={classes.inputContainer}>
-                    <TextField placeholder='Tytuł' id='title' value={title} onChange={handleTitleChange} required />
-                </div>
-                <div className={classes.inputContainer}>
-                    <TextField placeholder='Zawartość' id='content' value={content} onChange={handleContentChange} required />
-                </div>
-                <div className={classes.inputContainer}>
-                    <InputBase type="file" id="file" onChange={handleAttachmentChange} />
-                </div>
-                <div className={classes.inputContainer}>
-                    <Button variant="contained" type="submit" label="login" className="button-submit" primary={true}>
-                        Dodaj ogłoszenie
+            <CardContent>
+                <form onSubmit={handleSubmit}>
+                    <div className={classes.inputContainer}>
+                        <TextField className={classes.textField}
+                            placeholder='Tytuł'
+                            id='title'
+                            value={title}
+                            onChange={handleTitleChange}
+                            required />
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <TextField className={classes.textField}
+                            placeholder='Zawartość'
+                            id='content'
+                            value={content}
+                            multiline
+                            rows={10}
+                            onChange={handleContentChange}
+                            required />
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <InputBase
+                            type="file"
+                            id="file"
+                            onChange={handleAttachmentChange} />
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            label="Dodaj ogłoszenie"
+                            className="button-submit"
+                            primary={true}>
+                            Dodaj ogłoszenie
                     </Button>
-                </div>
-            </form>
-        </div>
+                    </div>
+                </form>
+            </CardContent>
+        </Card>
     );
 }
