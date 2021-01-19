@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import TextField from '@material-ui/core/TextField';
-import authHeader from "../../services/auth-header";
+import authHeader from "../../../services/auth-header";
 import Button from '@material-ui/core/Button';
 import { Alert, AlertTitle } from '@material-ui/lab'
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -28,59 +29,63 @@ const useStyles = makeStyles(() => ({
 export default function AnnouncementCreateForm() {
     const classes = useStyles();
 
-    const [title, setTitle] = React.useState('');
-    const [content, setContent] = React.useState('');
-    const [attachment, setAttachment] = React.useState(null);
+    const [announcement, setAnnouncement] = React.useState(emptyAnnouncement());
+    const [loading, setLoading] = React.useState(false);
     const [submitError, setSubmitError] = React.useState(null);
     const [submitSuccessful, setSubmitSuccessful] = React.useState(false);
 
-    function handleTitleChange(event) {
-        setTitle(event.target.value);
+    function emptyAnnouncement() {
+        return {
+            title: "",
+            content: "",
+            attachment: null,
+        }
+    }
+    function handleChange(e) {
+        setAnnouncement({ ...announcement, [e.target.name]: e.target.value });
     }
 
-    function handleContentChange(event) {
-        setContent(event.target.value);
-    }
 
     function handleAttachmentChange(event) {
-        setAttachment(event.target.files[0]);
+        setAnnouncement({ ...announcement, attachment: event.target.files[0] });
     }
 
     function handleSubmit(event) {
-        const axiosInstance = axios.create({
-            xsrfCookieName: 'csrftoken',
-            xsrfHeaderName: "X-CSRFTOKEN",
-            withCredentials: true,
-        })
-        event.preventDefault();
-        const formData = new FormData();
-        formData.append('file', attachment);
-        // form_data.append('file', attachment, this.state.image.name);
-        formData.append('title', title);
-        formData.append('content', content);
-        const url = '/api/announcements';
-        axiosInstance.post(url, formData, {
-            headers: {
-                'content-type': 'multipart/form-data',
-                ...authHeader()
-            }
-        })
-            .then(res => {
-                setSubmitSuccessful(true);
+        if (!loading) {
+            const axiosInstance = axios.create({
+                xsrfCookieName: 'csrftoken',
+                xsrfHeaderName: "X-CSRFTOKEN",
+                withCredentials: true,
+            })
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('file', announcement.attachment);
+            formData.append('title', announcement.title);
+            formData.append('content', announcement.content);
+            const url = '/api/announcements';
+            setLoading(true);
+            axiosInstance.post(url, formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                    ...authHeader()
+                }
+            })
+                .then(() => {
+                    setSubmitSuccessful(true);
 
-            })
-            .catch(err => {
-                setSubmitError(err)
-            })
-            .finally(() => {
-                resetForm();
-            });
+                })
+                .catch(err => {
+                    setSubmitError(err)
+                })
+                .finally(() => {
+                    setLoading(false);
+                    resetForm();
+                });
+        }
     }
 
     function resetForm() {
-        setTitle('');
-        setContent('');
-        setAttachment(null);
+        setAnnouncement(emptyAnnouncement);
 
         setTimeout(() => {
             setSubmitError(null);
@@ -118,18 +123,20 @@ export default function AnnouncementCreateForm() {
                         <TextField className={classes.textField}
                             placeholder='Tytuł'
                             id='title'
-                            value={title}
-                            onChange={handleTitleChange}
+                            name='title'
+                            value={announcement.title}
+                            onChange={handleChange}
                             required />
                     </div>
                     <div className={classes.inputContainer}>
                         <TextField className={classes.textField}
                             placeholder='Zawartość'
                             id='content'
-                            value={content}
+                            name='content'
+                            value={announcement.content}
                             multiline
                             rows={10}
-                            onChange={handleContentChange}
+                            onChange={handleChange}
                             required />
                     </div>
                     <div className={classes.inputContainer}>
@@ -145,8 +152,8 @@ export default function AnnouncementCreateForm() {
                             label="Dodaj ogłoszenie"
                             className="button-submit"
                             primary={true}>
-                            Dodaj ogłoszenie
-                    </Button>
+                            {loading ? <CircularProgress /> : "Dodaj ogłoszenie"}
+                        </Button>
                     </div>
                 </form>
             </CardContent>

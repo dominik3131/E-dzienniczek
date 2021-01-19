@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import * as API from '../../helpers/api/AnnouncementApi';
+import * as API from '../../../helpers/api/AnnouncementApi';
 import Announcement from './Announcement';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
