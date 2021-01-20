@@ -1,3 +1,3 @@
-const serverUrl = "https://e-dzienniczek.herokuapp.com";
+const serverUrl = "";
 
 export const loginApiUrl = () => `${serverUrl}/api/login`;
