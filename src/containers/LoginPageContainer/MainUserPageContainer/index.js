@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logout } from "../../../actions/auth";
 import { saveUserData } from "../../../actions/user";
+import { setReceivedMessagesForAccount } from "../../../actions/receivedMessages";
+import { setSentMessagesForAccount } from "../../../actions/sentMessages"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -12,6 +14,7 @@ import { useStyles } from "../../../styles/userPanel";
 import {getUserType} from "../../../helpers/localStorageUserApi";
 import { getStudentById } from '../../../helpers/api/StudentApi';
 import { getUserId } from "../../../helpers/localStorageUserApi";
+import { getAllReceivedMessages, getAllSentMessages } from "../../../helpers/api/MessagesApi";
 
 
 export default function MiniDrawer() {
@@ -23,8 +26,12 @@ export default function MiniDrawer() {
 
   useEffect(() => {
     const fetchData = async () => {
-     const response = await getStudentById(getUserId())
-     dispatch(saveUserData(response));
+     const userDataResponse = await getStudentById(getUserId());
+     const ReceivedMessagesResponse = await getAllReceivedMessages();
+     const sentMessagesForAccount = await getAllSentMessages();
+     dispatch(saveUserData(userDataResponse));
+     dispatch(setReceivedMessagesForAccount(ReceivedMessagesResponse));
+     dispatch(setSentMessagesForAccount(sentMessagesForAccount));
     }
     fetchData();
   }, [])
@@ -41,7 +48,11 @@ export default function MiniDrawer() {
           {
             title: "Wiadomości", 
             url: "/messages",
-            submenu: ["Nowa wiadomość", "Wysłane", "Odebrane"]
+            submenu: [
+              {title: "Nowa wiadomość", url: "/messages/new"}, 
+              {title:"Wysłane", url:"/messages/sent"}, 
+              {title: "Odebrane", url:"/messages/received"}
+            ]
           }
         ];
         setUserMenuPositions(sidebarMenu);
@@ -70,35 +81,6 @@ export default function MiniDrawer() {
         <Typography paragraph>
           <Content />
         </Typography>
-        {/* <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
       </main>
     </div>
   );

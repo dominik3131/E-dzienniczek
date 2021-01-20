@@ -200,12 +200,15 @@ class GradeSerializer(CustomSerializer):
     class Meta:
         model = Grade
         fields = '__all__'
-        extra_kwargs = {'id': {'required': False},'firstRetakeValue': {'required': False},'secondRetakeValue': {'required': False}}
+        extra_kwargs = {'id': {'required': False}, 'firstRetakeValue': {
+            'required': False}, 'secondRetakeValue': {'required': False}}
 
 
 class SchoolClassSerializer(CustomSerializer):
-    students = StudentSimpleSerializer(many=True, read_only=True, source='get_students')
-    subjects = SubjectSimpleSerializer(many=True, read_only=True,source='get_subjects')
+    students = StudentSimpleSerializer(
+        many=True, read_only=True, source='get_students')
+    subjects = SubjectSimpleSerializer(
+        many=True, read_only=True, source='get_subjects')
 
     class Meta:
         model = SchoolClass
@@ -230,11 +233,11 @@ class AnnouncementSerializer(CustomSerializer):
             attachment = request.FILES.get('file')
 
         announcement = Announcement.objects.create(
-            title = validated_data['title'],
-            content = validated_data['content'],
-            user = user,
-            date = timezone.now(),
-            attachment = attachment
+            title=validated_data['title'],
+            content=validated_data['content'],
+            user=user,
+            date=timezone.now(),
+            attachment=attachment
         )
 
         announcement.save()
@@ -258,18 +261,19 @@ class MessageSerializer(CustomSerializer):
         if request:
             sender = request.user
             receiver = User.objects.get(id=request.data['receiver'])
-        
+
         message = Message.objects.create(
-            title = validated_data['title'],
-            content = validated_data['content'],
-            receiver = receiver,
-            sender = sender,
-            date = timezone.now(),
+            title=request.data['title'],
+            content=request.data['content'],
+            receiver=receiver,
+            sender=sender,
+            date=timezone.now(),
         )
 
         message.save()
 
         return message
+
 
 class MessageMarkAsReadSerializer(CustomSerializer):
 

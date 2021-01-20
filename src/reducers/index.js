@@ -1,10 +1,14 @@
 import { combineReducers } from "redux";
 import auth from "./auth";
-import message from "./message";
+import logInMessage from "./logInMessage";
+import ReceivedMessages from "./ReceivedMessages";
+import SentMessages from "./SentMessages";
 import user from "./user";
 
 export default combineReducers({
   auth,
-  message,
+  logInMessage,
+  ReceivedMessages,
+  SentMessages,
   user
 });

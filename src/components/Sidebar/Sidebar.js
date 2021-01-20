@@ -64,12 +64,12 @@ const Sidebar = (props) => {
               {text.submenu && 
                 <Collapse in={show} timeout="auto" unmountOnExit>
                   {text.submenu.map((suboption, index) =>
-                    <List component="div" key={index} disablePadding>
+                    <List button component={Link} to={`${url}${suboption.url}`} key={index} disablePadding>
                       <ListItem button className={classes.nested}>
                         <ListItemIcon>
                           <StarBorder />
                         </ListItemIcon>
-                        <ListItemText primary={text.submenu[index]} />
+                        <ListItemText primary={suboption.title} />
                       </ListItem>
                     </List>
                   )}

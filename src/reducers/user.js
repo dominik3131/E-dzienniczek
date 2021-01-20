@@ -4,7 +4,10 @@ export default function (state = {}, action) {
     const { type, user } = action;
 
     switch(type) {
-        case SAVE_USER_DATA: return { user: user }
+        case SAVE_USER_DATA: return {
+            ...state, 
+            user: user 
+        }
         default:  return state;
     }
 }

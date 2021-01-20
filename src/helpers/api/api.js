@@ -24,7 +24,7 @@ export const apiCall = async (url, method, body, resolve, reject) => {
     body: JSON.stringify(body)
   };
   try {
-    const response = await axios(config);
+    const response = await axios(config).then(res => res.data);
     return response;
   } catch(error) {
     alert("Spróbuj ponownie" + error);
