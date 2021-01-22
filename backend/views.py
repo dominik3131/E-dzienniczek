@@ -280,7 +280,11 @@ class UsersList(generics.ListAPIView):
     permission_classes = (SafeMethodPermission,)
 
     def get_queryset(self):
-        return User.objects.all()
+        userType = self.request.user.type
+        if userType == 'STUDENT' or userType == 'PARENT': 
+            return User.objects.filter(type='TEACHER')
+        else:
+            return User.objects.all()
 
 
 class CustomLoginView(LoginView):
