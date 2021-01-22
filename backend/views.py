@@ -277,10 +277,14 @@ class CreateUserView(CreateAPIView):
 class UsersList(generics.ListAPIView):
 
     serializer_class = UserSimpleSerializer
-    permission_classes = (SafeMethodPermission)
+    permission_classes = (SafeMethodPermission,)
 
     def get_queryset(self):
-        return User.objects.all()
+        userType = self.request.user.type
+        if userType == 'STUDENT' or userType == 'PARENT': 
+            return User.objects.filter(type='TEACHER')
+        else:
+            return User.objects.all()
 
 
 class CustomLoginView(LoginView):

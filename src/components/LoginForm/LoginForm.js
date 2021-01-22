@@ -27,7 +27,7 @@ const LoginForm = ({ validateErrors, tryLogin, showErrors }) => {
     username: "",
     password: "",
   });
-  const apiErrorsMessage = useSelector((store) => store.message.message);
+  const apiErrorsMessage = useSelector((store) => store.logInMessage.message);
   const handleChange = (e) =>
     setData({ ...data, [e.target.name]: e.target.value });
   const classes = useStyles();

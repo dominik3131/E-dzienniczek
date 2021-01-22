@@ -8,7 +8,7 @@ export default (Cmp) => {
     };
     logIn = (login, password) => {
       axios
-        .get("https://e-dzienniczek.herokuapp.com/api/login", {
+        .get("/api/login", {
           username: JSON.stringify(login),
           password: JSON.stringify(password),
         })
