@@ -3,12 +3,21 @@ import auth from "./auth";
 import logInMessage from "./logInMessage";
 import ReceivedMessages from "./ReceivedMessages";
 import SentMessages from "./SentMessages";
+import TeachersList from "./TeachersList";
 import user from "./user";
 
-export default combineReducers({
+const appReducer = combineReducers({
   auth,
   logInMessage,
   ReceivedMessages,
   SentMessages,
-  user
+  TeachersList,
+  user,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === "LOGOUT") state = undefined;
+  return appReducer(state, action);
+};
+
+export default rootReducer;

@@ -14,12 +14,11 @@ class AuthService {
   }
 
   async logout() {
-    return await axios
-      .post(`${logoutApiUrl()}`)
-      .then((response) => {
-        localStorage.removeItem("user");
-        return response.data;
-      })
+    return await axios.post(`${logoutApiUrl()}`).then((response) => {
+      localStorage.removeItem("user");
+
+      return response.data;
+    });
   }
 }
 

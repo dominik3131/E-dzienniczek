@@ -1,6 +1,5 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import Subjects from "../Subjects/Subjects";
 import ReceviedMessages from "../Messages/ReceivedMessages";
 import SentMessages from "../Messages/SentMessages";
 import ShowSingleMessage from "../Messages/ShowSingleMessage";
@@ -14,12 +13,14 @@ const Student = () => {
       <Route exact path={path}>
         <p>Komponent</p>
       </Route>
-      <Route path={`${path}/subjects`} exact component={Subjects} />
+      <Route path={`${path}/class`} exact>
+        <div>classes</div>
+      </Route>
       <Route path={`${path}/polls`} exact>
         <div>Komponent polls</div>
       </Route>
       <Route
-        path={`${path}/announcements`}
+        path={`${path}/announcements/create`}
         exact
         component={AnnouncementList}
       />
