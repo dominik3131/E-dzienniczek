@@ -5,15 +5,14 @@ from django.contrib import admin
 from django.urls import path
 from rest_auth.views import LogoutView
 from rest_framework.urlpatterns import format_suffix_patterns
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from .views import *
 
 urlpatterns = [
     path('', index, name='index'),
-    path('api/admin/', admin.site.urls)
-]
-urlpatterns = [
-    path('', index, name='index'),
+    path('api/admin/', admin.site.urls),
+
     path('login', index, name='index'),
     path('logout', index, name='index'),
     
@@ -56,6 +55,11 @@ urlpatterns = [
     path('api/users/create', CreateUserView.as_view()),
     path('api/login',CustomLoginView.as_view(),name = 'login'),
     path('api/logout',LogoutView.as_view(),name='logout'),
+    
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)

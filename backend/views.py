@@ -25,7 +25,7 @@ class MethodSerializerView(object):
     For example:
     method_serializer_classes = {
         ('GET', ): MyModelListViewSerializer,
-        ('PUT', 'PATCH'): MyModelCreateUpdateSerializer
+        ('PUT'): MyModelCreateUpdateSerializer
     }
     '''
     method_serializer_classes = None
@@ -45,8 +45,7 @@ class MethodSerializerView(object):
 
 class StudentsList(generics.ListAPIView):
     '''
-    API: /api/students/
-    Method: GET
+    GET: List of all the students in school. Restricted for Teachers and Administrators
     '''
 
     permission_classes = (TeacherPermission | AdministratorPermission,)
@@ -56,10 +55,10 @@ class StudentsList(generics.ListAPIView):
         return Student.objects.all()
 
 
-class StudentDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
+class StudentDetail(MethodSerializerView, generics.RetrieveUpdateAPIView):
     '''
-    API: /api/students/:student_id
-    Method: GET/PUT/PATCH/DELETE
+    GET: Retrieving student detailed data. Restricted for Teachers and Administrators, specific student or his parent
+    PUT: Updating student detailed data. Restricted for Teachers and Administrators
     '''
 
     permission_classes = (
@@ -76,14 +75,13 @@ class StudentDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView)
     serializer_class = StudentSerializer
     queryset = Student.objects.all()
     method_serializer_classes = {
-        ('GET', 'PUT', 'PATCH',): StudentSerializer,
+        ('GET', 'PUT',): StudentSerializer,
     }
 
 
 class ParentsList(generics.ListAPIView):
     '''
-    API: /api/parents/
-    Method: GET
+    GET: List of all registered parents.  Restricted for Teachers and Administrators
     '''
 
     permission_classes = (TeacherPermission | AdministratorPermission,)
@@ -93,10 +91,10 @@ class ParentsList(generics.ListAPIView):
         return Parent.objects.all()
 
 
-class ParentDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
+class ParentDetail(MethodSerializerView, generics.RetrieveUpdateAPIView):
     '''
-    API: /api/parents/:parent_id
-    Method: GET/PUT/PATCH/DELETE
+    GET: Retrieving detailed data of parent. Restricted for Teachers and Administrators, specific parent and children of this parent\n
+    PUT: Updating detailed data of parent. Restricted for Teachers and Administrators
     '''
 
     permission_classes = (
@@ -113,25 +111,13 @@ class ParentDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
     queryset = Parent.objects.all()
     serializer_class = ParentSerializer
     method_serializer_classes = {
-        ('GET', 'PUT', 'PATCH',): ParentSerializer,
-    }
-
-
-class ParentDetailsView(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
-    '''
-    API: /api/parents/:parent_id/details
-    Method: PUT
-    '''
-    queryset = Parent.objects.all()
-    method_serializer_classes = {
-        ('GET', 'PUT', 'PATCH', ): ParentDetailsSerializer,
+        ('GET', 'PUT',): ParentSerializer,
     }
 
 
 class TeachersList(generics.ListAPIView):
     '''
-    API: /api/teachers/
-    Method: GET
+    GET: List of all teachers in school
     '''
 
     serializer_class = TeacherSimpleSerializer
@@ -140,10 +126,10 @@ class TeachersList(generics.ListAPIView):
         return Teacher.objects.all()
 
 
-class TeacherDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
+class TeacherDetail(MethodSerializerView, generics.RetrieveUpdateAPIView):
     '''
-    API: /api/teachers/:teacher_id
-    Method: GET/PUT/PATCH/DELETE
+    GET: Retrieving detailed data of teacher\n
+    PUT: Updating detailed data of teacher, Restricted for exact teacher and Administrators
     '''
 
     permission_classes = (
@@ -159,16 +145,21 @@ class TeacherDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView)
     )
     queryset = Teacher.objects.all()
     method_serializer_classes = {
-        ('GET', 'PUT', 'PATCH', ): TeacherSerializer,
+        ('GET', 'PUT', ): TeacherSerializer,
     }
 
 
 class SubjectsList(generics.ListCreateAPIView):
     '''
-    API: /api/subjects/
-    Method: GET/POST
+    GET: Retrieving list of all subjects\n
+    POST: Creating new subject. Restricted for Teachers and Administrators
     '''
     serializer_class = SubjectSimpleSerializer
+    permission_classes = (
+        SafeMethodPermission
+        | TeacherPermission
+        | AdministratorPermission,
+    )
 
     def get_queryset(self):
         return Subject.objects.all()
@@ -177,21 +168,32 @@ class SubjectsList(generics.ListCreateAPIView):
         serializer.save()
 
 
-class SubjectDetail(generics.RetrieveUpdateDestroyAPIView):
+class SubjectDetail(generics.RetrieveUpdateAPIView):
     '''
-    API: /api/subjects/:subject_id
-    Method: GET/PUT/PATCH/DELETE
+    GET: Retrieving detailed data of subject\n
+    PUT: Updating subject. Restricted for Teachers and Administrators
     '''
+    permission_classes = (
+        SafeMethodPermission
+        | TeacherPermission
+        | AdministratorPermission,
+    )
+
     queryset = Subject.objects.all()
     serializer_class = SubjectSimpleSerializer
 
 
 class SchoolClassList(generics.ListCreateAPIView):
     '''
-    API: /api/classes/
-    Method: GET/POST
+    GET: Retrieving list of all classes\n
+    POST: Creating new class. Restricted for Teachers and Administrators
     '''
     serializer_class = SchoolClassSimpleSerializer
+    permission_classes = (
+        SafeMethodPermission
+        | TeacherPermission
+        | AdministratorPermission,
+    )
 
     def get_queryset(self):
         return SchoolClass.objects.all()
@@ -200,41 +202,68 @@ class SchoolClassList(generics.ListCreateAPIView):
         serializer.save()
 
 
-class SchoolClassDetail(MethodSerializerView, generics.RetrieveUpdateDestroyAPIView):
+class SchoolClassDetail(MethodSerializerView, generics.RetrieveUpdateAPIView):
     '''
-    API: /api/classes/:class_id
-    Method: GET/PUT/PATCH/DELETE
+    GET: Retrieving detailed class data\n
+    PUT: Updating class data. Restricted for Teachers and Administrators
     '''
+
+    permission_classes = (
+        SafeMethodPermission
+        | TeacherPermission
+        | AdministratorPermission,
+    )
+
     queryset = SchoolClass.objects.all()
     method_serializer_classes = {
-        ('GET', 'PUT', 'PATCH', ): SchoolClassSerializer,
+        ('GET', 'PUT', ): SchoolClassSerializer,
     }
 
 
 class SchoolClassStudentList(generics.ListAPIView):
-
+    '''
+    GET: Retrieving list of students in class\n
+    PUT: Updating class members. Restricted for Teachers and Administrators
+    '''
     serializer_class = StudentSimpleSerializer
+    permission_classes = (
+        SafeMethodPermission
+        | TeacherPermission
+        | AdministratorPermission,
+    )
 
     def get_queryset(self):
         return Student.objects.filter(studentdetails__schoolClass__id=self.kwargs['pk'])
 
 
 class SchoolClassSubjectList(generics.ListAPIView):
-
+    '''
+    GET: Retrieving list of subjects of class\n
+    PUT: Updating subjects of class. Restricted for Teachers and Administrators
+    '''
     serializer_class = SubjectSimpleSerializer
-
+    permission_classes = (
+        SafeMethodPermission
+        | TeacherPermission
+        | AdministratorPermission,
+    )
     def get_queryset(self):
         return Subject.objects.filter(schoolClass__id=self.kwargs['pk'])
 
 
 class CreateGradeView(CreateAPIView):
-
+    '''
+    POST: Creating grade. Restricted for Teachers and Administrators
+    '''
     model = Grade
     serializer_class = GradeSimpleSerializer
     permission_classes = (AdministratorPermission | TeacherPermission, )
 
-class UpdateGradeView(generics.UpdateAPIView):
 
+class UpdateGradeView(generics.UpdateAPIView):
+    '''
+    POST: Updating grade. Restricted for Teachers and Administrators
+    '''
     model = Grade
     serializer_class = GradeSerializer
     permission_classes = (AdministratorPermission | TeacherPermission, )
@@ -242,8 +271,12 @@ class UpdateGradeView(generics.UpdateAPIView):
     def get_queryset(self):
         return Grade.objects.all()
 
-class AnnouncementsList(generics.ListCreateAPIView):
 
+class AnnouncementsList(generics.ListCreateAPIView):
+    '''
+    GET: Retrieving list of announcements ordered by date, where most recent one is first\n
+    POST: Creating new Announcement. Restricted for Teachers and Administrators
+    '''
     serializer_class = AnnouncementSerializer
     permission_classes = (SafeMethodPermission |
                           TeacherPermission | AdministratorPermission,)
@@ -258,7 +291,9 @@ class AnnouncementsList(generics.ListCreateAPIView):
 
 
 class AnnouncementsLatestList(generics.ListAPIView):
-
+    '''
+    GET: Retrieving list of 3 most recent announcements.
+    '''
     serializer_class = AnnouncementSerializer
     permission_classes = (SafeMethodPermission |
                           TeacherPermission | AdministratorPermission,)
@@ -268,26 +303,38 @@ class AnnouncementsLatestList(generics.ListAPIView):
 
 
 class CreateUserView(CreateAPIView):
-
+    '''
+    POST: Creating new user in the school system.\n
+    Restricted to teachers and administrators.\n
+    Teachers can create accounts for other teachers, students and parents.\n
+    Administrators can additionally create other administrators accounts.
+    '''
     model = get_user_model()
     permission_classes = (UserCreatePermission,)
     serializer_class = UserSerializer
 
 
 class UsersList(generics.ListAPIView):
-
+    '''
+    GET: List of users\n
+    Parents and Students will see only teachers data.\n
+    Teachers and Administrators will see all users in the system.
+    '''
     serializer_class = UserSimpleSerializer
     permission_classes = (SafeMethodPermission,)
 
     def get_queryset(self):
         userType = self.request.user.type
-        if userType == 'STUDENT' or userType == 'PARENT': 
+        if userType == 'STUDENT' or userType == 'PARENT':
             return User.objects.filter(type='TEACHER')
         else:
             return User.objects.all()
 
 
 class CustomLoginView(LoginView):
+    '''
+    POST: Login to an account. Session key and logged user data will be returned
+    '''
     @ csrf_exempt
     def get_response(self):
 
@@ -309,7 +356,9 @@ class CustomLoginView(LoginView):
 
 
 class SentMessageList(generics.ListAPIView):
-
+    '''
+    GET: List of sent messages of currently logged user
+    '''
     serializer_class = MessageSerializer
     permission_classes = (SafeMethodPermission,)
 
@@ -318,7 +367,9 @@ class SentMessageList(generics.ListAPIView):
 
 
 class ReceivedMessageList(generics.ListAPIView):
-
+    '''
+    GET: List of received messages of currently logged user
+    '''
     serializer_class = MessageSerializer
     permission_classes = (SafeMethodPermission,)
 
@@ -327,7 +378,9 @@ class ReceivedMessageList(generics.ListAPIView):
 
 
 class SendMessageView(generics.CreateAPIView):
-
+    '''
+    POST: Sends new message
+    '''
     serializer_class = MessageSerializer
 
     def perform_create(self, serializer):
@@ -336,7 +389,9 @@ class SendMessageView(generics.CreateAPIView):
 
 
 class MarkMessageAsReadView(generics.UpdateAPIView):
-
+    '''
+    POST: Marks message as read. Restricted to user that was receiver of the message
+    '''
     permission_classes = (MessageReceiverPermission,)
 
     def get_queryset(self):
