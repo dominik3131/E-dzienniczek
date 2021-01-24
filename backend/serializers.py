@@ -127,8 +127,8 @@ class TeacherSerializer(CustomSerializer):
 
     class Meta:
         model = Teacher
-        fields = ("id", "email", "first_name", "last_name", "type")
-        extra_kwargs = {'email': {'required': False}}
+        fields = ("id", "email", "first_name", "last_name", "type","details")
+        extra_kwargs = {'email': {'required': False},'details': {'required': False}}
 
 
 class StudentDetailsSerializer(CustomSerializer):
