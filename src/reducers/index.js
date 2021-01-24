@@ -3,7 +3,7 @@ import auth from "./auth";
 import logInMessage from "./logInMessage";
 import ReceivedMessages from "./ReceivedMessages";
 import SentMessages from "./SentMessages";
-import TeachersList from "./TeachersList";
+import UsersToChat from "./UsersToChat";
 import user from "./user";
 
 const appReducer = combineReducers({
@@ -11,7 +11,7 @@ const appReducer = combineReducers({
   logInMessage,
   ReceivedMessages,
   SentMessages,
-  TeachersList,
+  UsersToChat,
   user,
 });
 

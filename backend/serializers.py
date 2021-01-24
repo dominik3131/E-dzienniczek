@@ -260,7 +260,7 @@ class MessageSerializer(CustomSerializer):
         receiver = None
         if request:
             sender = request.user
-            receiver = User.objects.get(id=request.data['receiver'])
+            receiver = User.objects.get(email=request.data['receiver'])
 
         message = Message.objects.create(
             title=request.data['title'],
