@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getUserType } from "../helpers/localStorageUserApi";
-import { getAllTeachers, getTeacherById } from "../helpers/api/TeacherApi";
-import { setTeachersList } from "../actions/teachers";
+import { getTeacherById } from "../helpers/api/TeacherApi";
+import { getUsersForSendMessages } from "../helpers/api/UsersApi";
+import { setUsersToChatList } from "../actions/usersToChat";
 import { saveUserData } from "../actions/user";
 import { setReceivedMessagesForAccount } from "../actions/receivedMessages";
 import { setSentMessagesForAccount } from "../actions/sentMessages";
@@ -13,16 +14,16 @@ import {
 } from "../helpers/api/MessagesApi";
 import { getUserId } from "../helpers/localStorageUserApi";
 
-const fetchData = async (getUserById, getPresonsForSendMessages, dispatch) => {
+const fetchData = async (getUserById, dispatch) => {
   const userDataResponse = await getUserById(getUserId());
   const ReceivedMessagesResponse = await getAllReceivedMessages();
   const sentMessagesForAccount = await getAllSentMessages();
-  const personsForMessage = await getPresonsForSendMessages();
+  const personsForMessage = await getUsersForSendMessages();
 
   dispatch(saveUserData(userDataResponse));
   dispatch(setReceivedMessagesForAccount(ReceivedMessagesResponse));
   dispatch(setSentMessagesForAccount(sentMessagesForAccount));
-  dispatch(setTeachersList(personsForMessage));
+  dispatch(setUsersToChatList(personsForMessage));
 };
 
 const useBuildUserPanel = () => {
@@ -50,7 +51,7 @@ const useBuildUserPanel = () => {
             ],
           },
         ];
-        fetchData(getTeacherById, getAllTeachers, dispatch);
+        fetchData(getTeacherById, dispatch);
         break;
       }
       case "STUDENT": {
@@ -68,7 +69,7 @@ const useBuildUserPanel = () => {
             ],
           },
         ];
-        fetchData(getStudentById, getAllTeachers, dispatch);
+        fetchData(getStudentById, dispatch);
         break;
       }
 
