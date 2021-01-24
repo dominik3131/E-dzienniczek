@@ -143,6 +143,7 @@ const NewMessage = () => {
       <SuccessAlert
         open={openAlertSuccess}
         close={() => setOpenAlertSuccess(false)}
+        content="Wiadomość została wysłana pomyślnie!"
       />
     </Typography>
   );
