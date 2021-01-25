@@ -109,6 +109,9 @@ class TeacherManager(UserManager):
 class TeacherDetails(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def get_subjects(self):
+        return Subject.objects.filter(teacher=self.user)
+
 
 class Teacher(User):
     base_type = User.Types.TEACHER

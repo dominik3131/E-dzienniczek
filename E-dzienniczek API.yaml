@@ -1,0 +1,1759 @@
+openapi: 3.0.3
+info:
+  title: E-dzienniczek API
+  version: 1.0.0
+  description: API of project E-dzienniczek used for managing school staff and students
+    data
+  contact:
+    name: Dominik Rak
+    email: rakdominikrak@gmail.com
+paths:
+  /api/announcements:
+    get:
+      operationId: api_announcements_list
+      description: |-
+        GET: Retrieving list of announcements ordered by date, where most recent one is first
+
+        POST: Creating new Announcement. Restricted for Teachers and Administrators
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announcement'
+          description: ''
+    post:
+      operationId: api_announcements_create
+      description: |-
+        GET: Retrieving list of announcements ordered by date, where most recent one is first
+
+        POST: Creating new Announcement. Restricted for Teachers and Administrators
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: ''
+  /api/announcements/latest:
+    get:
+      operationId: api_announcements_latest_list
+      description: 'GET: Retrieving list of 3 most recent announcements.'
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announcement'
+          description: ''
+  /api/classes:
+    get:
+      operationId: api_classes_list
+      description: |-
+        GET: Retrieving list of all classes
+
+        POST: Creating new class. Restricted for Teachers and Administrators
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SchoolClassSimple'
+          description: ''
+    post:
+      operationId: api_classes_create
+      description: |-
+        GET: Retrieving list of all classes
+
+        POST: Creating new class. Restricted for Teachers and Administrators
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchoolClassSimple'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SchoolClassSimple'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SchoolClassSimple'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchoolClassSimple'
+          description: ''
+  /api/classes/{id}:
+    get:
+      operationId: api_classes_retrieve
+      description: |-
+        GET: Retrieving detailed class data
+
+        PUT: Updating class data. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchoolClass'
+          description: ''
+    put:
+      operationId: api_classes_update
+      description: |-
+        GET: Retrieving detailed class data
+
+        PUT: Updating class data. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchoolClass'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SchoolClass'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SchoolClass'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchoolClass'
+          description: ''
+    patch:
+      operationId: api_classes_partial_update
+      description: |-
+        GET: Retrieving detailed class data
+
+        PUT: Updating class data. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSchoolClass'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSchoolClass'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSchoolClass'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchoolClass'
+          description: ''
+  /api/classes/{id}/students:
+    get:
+      operationId: api_classes_students_list
+      description: |-
+        GET: Retrieving list of students in class
+
+        PUT: Updating class members. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentSimple'
+          description: ''
+  /api/classes/{id}/subjects:
+    get:
+      operationId: api_classes_subjects_list
+      description: |-
+        GET: Retrieving list of subjects of class
+
+        PUT: Updating subjects of class. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubjectSimple'
+          description: ''
+  /api/grades:
+    post:
+      operationId: api_grades_create
+      description: 'POST: Creating grade. Restricted for Teachers and Administrators'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GradeSimple'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GradeSimple'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GradeSimple'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GradeSimple'
+          description: ''
+  /api/grades/{id}:
+    put:
+      operationId: api_grades_update
+      description: 'POST: Updating grade. Restricted for Teachers and Administrators'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Grade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Grade'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    patch:
+      operationId: api_grades_partial_update
+      description: 'POST: Updating grade. Restricted for Teachers and Administrators'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGrade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGrade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGrade'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+  /api/login:
+    post:
+      operationId: api_login_create
+      description: 'POST: Login to an account. Session key and logged user data will
+        be returned'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /api/logout:
+    get:
+      operationId: api_logout_retrieve
+      description: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+
+        Accepts/Returns nothing.
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_logout_create
+      description: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+
+        Accepts/Returns nothing.
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/messages:
+    post:
+      operationId: api_messages_create
+      description: 'POST: Sends new message'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Message'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Message'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+  /api/messages/{id}/markAsRead:
+    put:
+      operationId: api_messages_markAsRead_update
+      description: 'POST: Marks message as read. Restricted to user that was receiver
+        of the message'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: api_messages_markAsRead_partial_update
+      description: 'POST: Marks message as read. Restricted to user that was receiver
+        of the message'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/messages/received:
+    get:
+      operationId: api_messages_received_list
+      description: 'GET: List of received messages of currently logged user'
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+          description: ''
+  /api/messages/sent:
+    get:
+      operationId: api_messages_sent_list
+      description: 'GET: List of sent messages of currently logged user'
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+          description: ''
+  /api/parents:
+    get:
+      operationId: api_parents_list
+      description: 'GET: List of all registered parents.  Restricted for Teachers
+        and Administrators'
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParentSimple'
+          description: ''
+  /api/parents/{id}:
+    get:
+      operationId: api_parents_retrieve
+      description: |-
+        GET: Retrieving detailed data of parent. Restricted for Teachers and Administrators, specific parent and children of this parent
+
+        PUT: Updating detailed data of parent. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+          description: ''
+    put:
+      operationId: api_parents_update
+      description: |-
+        GET: Retrieving detailed data of parent. Restricted for Teachers and Administrators, specific parent and children of this parent
+
+        PUT: Updating detailed data of parent. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Parent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Parent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Parent'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+          description: ''
+    patch:
+      operationId: api_parents_partial_update
+      description: |-
+        GET: Retrieving detailed data of parent. Restricted for Teachers and Administrators, specific parent and children of this parent
+
+        PUT: Updating detailed data of parent. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedParent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedParent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedParent'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parent'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/students:
+    get:
+      operationId: api_students_list
+      description: 'GET: List of all the students in school. Restricted for Teachers
+        and Administrators'
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentSimple'
+          description: ''
+  /api/students/{id}:
+    get:
+      operationId: api_students_retrieve
+      description: |-
+        GET: Retrieving student detailed data. Restricted for Teachers and Administrators, specific student or his parent
+        PUT: Updating student detailed data. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+    put:
+      operationId: api_students_update
+      description: |-
+        GET: Retrieving student detailed data. Restricted for Teachers and Administrators, specific student or his parent
+        PUT: Updating student detailed data. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Student'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+    patch:
+      operationId: api_students_partial_update
+      description: |-
+        GET: Retrieving student detailed data. Restricted for Teachers and Administrators, specific student or his parent
+        PUT: Updating student detailed data. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudent'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+  /api/subjects:
+    get:
+      operationId: api_subjects_list
+      description: |-
+        GET: Retrieving list of all subjects
+
+        POST: Creating new subject. Restricted for Teachers and Administrators
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubjectSimple'
+          description: ''
+    post:
+      operationId: api_subjects_create
+      description: |-
+        GET: Retrieving list of all subjects
+
+        POST: Creating new subject. Restricted for Teachers and Administrators
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectSimple'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectSimple'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectSimple'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectSimple'
+          description: ''
+  /api/subjects/{id}:
+    get:
+      operationId: api_subjects_retrieve
+      description: |-
+        GET: Retrieving detailed data of subject
+
+        PUT: Updating subject. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectSimple'
+          description: ''
+    put:
+      operationId: api_subjects_update
+      description: |-
+        GET: Retrieving detailed data of subject
+
+        PUT: Updating subject. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectSimple'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubjectSimple'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubjectSimple'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectSimple'
+          description: ''
+    patch:
+      operationId: api_subjects_partial_update
+      description: |-
+        GET: Retrieving detailed data of subject
+
+        PUT: Updating subject. Restricted for Teachers and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectSimple'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectSimple'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubjectSimple'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectSimple'
+          description: ''
+  /api/teachers:
+    get:
+      operationId: api_teachers_list
+      description: 'GET: List of all teachers in school'
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeacherSimple'
+          description: ''
+  /api/teachers/{id}:
+    get:
+      operationId: api_teachers_retrieve
+      description: |-
+        GET: Retrieving detailed data of teacher
+
+        PUT: Updating detailed data of teacher, Restricted for exact teacher and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+          description: ''
+    put:
+      operationId: api_teachers_update
+      description: |-
+        GET: Retrieving detailed data of teacher
+
+        PUT: Updating detailed data of teacher, Restricted for exact teacher and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Teacher'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Teacher'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Teacher'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+          description: ''
+    patch:
+      operationId: api_teachers_partial_update
+      description: |-
+        GET: Retrieving detailed data of teacher
+
+        PUT: Updating detailed data of teacher, Restricted for exact teacher and Administrators
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacher'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacher'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacher'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+          description: ''
+  /api/users:
+    get:
+      operationId: api_users_list
+      description: |-
+        GET: List of users
+
+        Parents and Students will see only teachers data.
+
+        Teachers and Administrators will see all users in the system.
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSimple'
+          description: ''
+  /api/users/create:
+    post:
+      operationId: api_users_create_create
+      description: |-
+        POST: Creating new user in the school system.
+
+        Restricted to teachers and administrators.
+
+        Teachers can create accounts for other teachers, students and parents.
+
+        Administrators can additionally create other administrators accounts.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    Announcement:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserSimple'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        content:
+          type: string
+          maxLength: 2000
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        attachment:
+          type: string
+          format: uri
+      required:
+      - content
+      - date
+      - id
+      - title
+      - user
+    Grade:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student:
+          allOf:
+          - $ref: '#/components/schemas/StudentSimple'
+          readOnly: true
+        subject:
+          allOf:
+          - $ref: '#/components/schemas/SubjectSimple'
+          readOnly: true
+        value:
+          type: integer
+          maximum: 6
+          minimum: 1
+        firstRetakeValue:
+          type: integer
+          maximum: 6
+          minimum: 1
+          nullable: true
+        secondRetakeValue:
+          type: integer
+          maximum: 6
+          minimum: 1
+          nullable: true
+        description:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - student
+      - subject
+    GradeSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        value:
+          type: integer
+          maximum: 6
+          minimum: 1
+        firstRetakeValue:
+          type: integer
+          maximum: 6
+          minimum: 1
+          nullable: true
+        secondRetakeValue:
+          type: integer
+          maximum: 6
+          minimum: 1
+          nullable: true
+        description:
+          type: string
+          maxLength: 100
+        student:
+          type: integer
+        subject:
+          type: integer
+      required:
+      - id
+      - student
+      - subject
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+      - password
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sender:
+          allOf:
+          - $ref: '#/components/schemas/UserSimple'
+          readOnly: true
+        receiver:
+          allOf:
+          - $ref: '#/components/schemas/UserSimple'
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        read:
+          type: boolean
+      required:
+      - content
+      - date
+      - id
+      - receiver
+      - sender
+      - title
+    Parent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        details:
+          $ref: '#/components/schemas/ParentDetails'
+      required:
+      - details
+      - id
+    ParentDetails:
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentSimple'
+      required:
+      - children
+    ParentSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - id
+    PatchedGrade:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student:
+          allOf:
+          - $ref: '#/components/schemas/StudentSimple'
+          readOnly: true
+        subject:
+          allOf:
+          - $ref: '#/components/schemas/SubjectSimple'
+          readOnly: true
+        value:
+          type: integer
+          maximum: 6
+          minimum: 1
+        firstRetakeValue:
+          type: integer
+          maximum: 6
+          minimum: 1
+          nullable: true
+        secondRetakeValue:
+          type: integer
+          maximum: 6
+          minimum: 1
+          nullable: true
+        description:
+          type: string
+          maxLength: 100
+    PatchedParent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        details:
+          $ref: '#/components/schemas/ParentDetails'
+    PatchedSchoolClass:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubjectSimple'
+          readOnly: true
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentSimple'
+          readOnly: true
+    PatchedStudent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        details:
+          $ref: '#/components/schemas/StudentDetails'
+    PatchedSubjectSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        teacher:
+          type: integer
+          nullable: true
+        schoolClass:
+          type: integer
+          nullable: true
+    PatchedTeacher:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+    SchoolClass:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubjectSimple'
+          readOnly: true
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentSimple'
+          readOnly: true
+      required:
+      - id
+      - students
+      - subjects
+      - title
+    SchoolClassSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+      required:
+      - id
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        details:
+          $ref: '#/components/schemas/StudentDetails'
+      required:
+      - details
+      - id
+    StudentDetails:
+      type: object
+      properties:
+        schoolClass:
+          $ref: '#/components/schemas/SchoolClassSimple'
+        parents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParentSimple'
+          readOnly: true
+        grades:
+          type: array
+          items:
+            $ref: '#/components/schemas/GradeSimple'
+          readOnly: true
+      required:
+      - grades
+      - parents
+      - schoolClass
+    StudentSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - id
+    SubjectSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        teacher:
+          type: integer
+          nullable: true
+        schoolClass:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - title
+    Teacher:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - id
+    TeacherSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - email
+      - id
+    TypeEnum:
+      enum:
+      - ADMINISTRATOR
+      - TEACHER
+      - STUDENT
+      - PARENT
+      type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - email
+      - id
+      - password
+    UserSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - email
+      - id
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: Session
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
