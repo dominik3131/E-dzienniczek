@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getUserType } from "../helpers/localStorageUserApi";
 import { getTeacherById } from "../helpers/api/TeacherApi";
+import { getParentById } from "../helpers/api/ParentApi";
 import { getUsersForSendMessages } from "../helpers/api/UsersApi";
 import { setUsersToChatList } from "../actions/usersToChat";
 import { saveUserData } from "../actions/user";
@@ -34,6 +35,18 @@ const useBuildUserPanel = () => {
     const type = getUserType();
     switch (type) {
       case "ADMINISTRATOR": {
+        sidebarMenu = [
+          { title: "Konta użytkowników", url: "/users" },
+          {
+            title: "Wiadomości",
+            url: "/messages",
+            submenu: [
+              { title: "Nowa wiadomość", url: "/messages/new" },
+              { title: "Wysłane", url: "/messages/sent" },
+              { title: "Odebrane", url: "/messages/received" },
+            ],
+          },
+        ];
         break;
       }
       case "TEACHER": {
@@ -70,6 +83,23 @@ const useBuildUserPanel = () => {
           },
         ];
         fetchData(getStudentById, dispatch);
+        break;
+      }
+      case "PARENT": {
+        sidebarMenu = [
+          { title: "Przedmioty i oceny", url: "/subjects" },
+          { title: "Ogłoszenia", url: "/announcements" },
+          {
+            title: "Wiadomości",
+            url: "/messages",
+            submenu: [
+              { title: "Nowa wiadomość", url: "/messages/new" },
+              { title: "Wysłane", url: "/messages/sent" },
+              { title: "Odebrane", url: "/messages/received" },
+            ],
+          },
+        ];
+        fetchData(getParentById, dispatch);
         break;
       }
 

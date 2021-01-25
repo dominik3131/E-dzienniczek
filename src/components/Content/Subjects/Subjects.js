@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useStyles } from "../../../styles/subjects";
-import { getSubjectsOfClass } from "../../../helpers/api/SubjectApi";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,24 +13,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-const Subjects = () => {
+const Subjects = ({ subjects, grades }) => {
   const classes = useStyles();
-  const userClass = useSelector(
-    (state) => state.user.user && state.user.user.details.schoolClass
-  );
-  const grades = useSelector(
-    (state) => state.user.user && state.user.user.details.grades
-  );
-  const [subjects, setSubjects] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getSubjectsOfClass(userClass.id);
-      setSubjects(response);
-    };
-    if (userClass) fetchData();
-  }, [userClass]);
-
+  console.log(subjects);
+  console.log(grades);
   return (
     <div className={classes.root}>
       {subjects.length !== 0 ? (
