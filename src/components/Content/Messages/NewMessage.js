@@ -11,7 +11,7 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import ConfirmMessageAlert from "../../Alerts/ConfirmMessageAlert";
-import SuccessAlert from "../../Alerts/SuccessAlert";
+import Alert from "../../Alerts/Alert";
 import { sendMessage } from "../../../helpers/api/MessagesApi";
 import clsx from "clsx";
 
@@ -140,10 +140,11 @@ const NewMessage = () => {
         close={handleClose}
         send={handleSendMessage}
       />
-      <SuccessAlert
+      <Alert
         open={openAlertSuccess}
         close={() => setOpenAlertSuccess(false)}
         content="Wiadomość została wysłana pomyślnie!"
+        type="success"
       />
     </Typography>
   );

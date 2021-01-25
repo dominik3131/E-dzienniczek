@@ -6,6 +6,7 @@ import ShowSingleMessage from "../Messages/ShowSingleMessage";
 import NewMessage from "../Messages/NewMessage";
 import AnnouncementList from "../Announcement/AnnouncementList";
 import Classes from "../TeacherClasses/Classes";
+import ClassesTabs from "../TeacherClasses/ClassesTabs";
 
 const Student = () => {
   const { path } = useRouteMatch();
@@ -15,6 +16,11 @@ const Student = () => {
         <p>Komponent</p>
       </Route>
       <Route path={`${path}/class`} exact component={Classes} />
+      <Route
+        path={`${path}/class/:classId/:subjectId`}
+        exact
+        component={ClassesTabs}
+      />
       <Route path={`${path}/polls`} exact>
         <div>Komponent polls</div>
       </Route>
