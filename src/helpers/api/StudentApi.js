@@ -1,4 +1,4 @@
-import * as API from '../api/api';
+import * as API from "../api/api";
 
 const studentURL = "/api/students";
 

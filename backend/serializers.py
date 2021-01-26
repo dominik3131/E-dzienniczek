@@ -116,10 +116,12 @@ class ParentSimpleSerializer(CustomSerializer):
 
 
 class TeacherDetailsSerializer(CustomSerializer):
+    subjects = SubjectSimpleSerializer(
+        many=True, read_only=True, source='get_subjects')
 
     class Meta:
-        model = StudentDetails
-        fields = []
+        model = TeacherDetails
+        fields = ("subjects", )
 
 
 class TeacherSerializer(CustomSerializer):
