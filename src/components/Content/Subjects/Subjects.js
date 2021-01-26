@@ -15,8 +15,6 @@ import Paper from "@material-ui/core/Paper";
 
 const Subjects = ({ subjects, grades }) => {
   const classes = useStyles();
-  console.log(subjects);
-  console.log(grades);
   return (
     <div className={classes.root}>
       {subjects.length !== 0 ? (

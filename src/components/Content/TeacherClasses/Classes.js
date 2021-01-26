@@ -23,7 +23,7 @@ const Classes = () => {
   );
   return (
     <Grid item xs={12}>
-      {teacherSubjects &&
+      {(teacherSubjects &&
         teacherSubjects.map(({ id, title, schoolClass }) => (
           <List key={id} className={classes.root} aria-label="contacts">
             <ListItem
@@ -35,7 +35,7 @@ const Classes = () => {
             </ListItem>
             <Divider />
           </List>
-        ))}
+        ))) || <div>Brak przedmiotów na Twojej liście!</div>}
     </Grid>
   );
 };

@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: "30ch",
+      width: "40ch",
     },
     "& .MuiButton-root": {
       margin: theme.spacing(1),
-      width: "30ch",
+      width: "40ch",
     },
   },
 }));

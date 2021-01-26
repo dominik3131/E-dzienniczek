@@ -7,6 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import ClassesInsertGrade from "./ClassesInsertGrade";
+import ClassesUpdateGrade from "./ClassesUpdateGrade";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,6 +59,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  tabs: {
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
 const ClassesTabs = (props) => {
@@ -87,16 +92,19 @@ const ClassesTabs = (props) => {
           <LinkTab label="Lista ocen uczniów" href="/spam" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={0} className={classes.tabs}>
         <ClassesInsertGrade
           classId={props.match.params.classId}
           subjectId={props.match.params.subjectId}
         />
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        Wprowadź ocenę z poprawy
+      <TabPanel value={value} index={1} className={classes.tabs}>
+        <ClassesUpdateGrade
+          classId={props.match.params.classId}
+          subjectId={props.match.params.subjectId}
+        />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={2} className={classes.tabs}>
         Lista ocen uczniów
       </TabPanel>
     </div>
