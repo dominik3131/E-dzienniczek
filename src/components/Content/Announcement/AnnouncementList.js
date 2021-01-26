@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import * as API from '../../../helpers/api/AnnouncementApi';
 import Announcement from './Announcement';
+import { getLatestAnnouncements, getAllAnnouncements } from "../../../helpers/api/AnnouncementApi";
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(() => ({
     root: {
-        minWidth: 320,
-        maxWidth: 820,
+        minWidth: 420,
         padding: 10,
     },
 }));
@@ -16,59 +15,23 @@ const useStyles = makeStyles(() => ({
 export default function AnnouncementList(props) {
 
     const classes = useStyles();
-    // TODO initial state as []
-    const [announcements, setAnnouncements] = React.useState([
-        {
-            "id": 15,
-            "user": {
-                "id": 8,
-                "email": "admin1@test.com",
-                "first_name": "Klaudia4",
-                "last_name": "Rak",
-                "type": "ADMINISTRATOR"
-            },
-            "title": "announcement 7",
-            "content": "announcement content 7",
-            "date": "2021-01-15T19:53:05.828187Z",
-            "attachment": "http://localhost:8000/media/test.txt"
-        },
-        {
-            "id": 14,
-            "user": {
-                "id": 8,
-                "email": "admin1@test.com",
-                "first_name": "Klaudia4",
-                "last_name": "Rak",
-                "type": "ADMINISTRATOR"
-            },
-            "title": "announcement 7",
-            "content": "announcement content 7",
-            "date": "2020-12-20T11:19:50.820760Z",
-            "attachment": "http://localhost:8000/media/1_btz24bC.png"
-        },
-        {
-            "id": 13,
-            "user": {
-                "id": 8,
-                "email": "admin1@test.com",
-                "first_name": "Klaudia4",
-                "last_name": "Rak",
-                "type": "ADMINISTRATOR"
-            },
-            "title": "announcement 7",
-            "content": "announcement content 7",
-            "date": "2020-12-20T11:19:39.752678Z",
-            "attachment": "http://localhost:8000/media/test.pdf"
-        }
-    ]);
+    const [announcements, setAnnouncements] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
-        // TODO fetching announcements when component activates
-        // using api/announcements if props.onlyLatest is false
-        // using api/announcements/latest otherwise
-        setLoading(false);
-    }, []);
+        const fetchData = props.onlyLatest 
+        ? async () => {
+          const response = await getLatestAnnouncements();
+          setAnnouncements(response);
+          setLoading(false)
+        }
+        :async () => {
+            const response = await getAllAnnouncements();
+            setAnnouncements(response);
+            setLoading(false)
+          }
+        fetchData();
+      }, []);
 
 
     function Announcements() {

@@ -17,7 +17,6 @@ import Select from '@material-ui/core/Select';
 const useStyles = makeStyles(() => ({
     root: {
         minWidth: 320,
-        maxWidth: 820,
         padding: 10,
         margin: 10
     },

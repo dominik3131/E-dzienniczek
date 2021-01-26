@@ -13,8 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(() => ({
     root: {
-        minWidth: 320,
-        maxWidth: 820,
+        minWidth: 420,
         padding: 10,
         margin: 10
     },

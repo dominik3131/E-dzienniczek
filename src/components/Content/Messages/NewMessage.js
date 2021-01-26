@@ -85,13 +85,13 @@ const NewMessage = () => {
       <Box className={classes.row}>
         <Box className={classes.label}>Do:</Box>
         <FormControl variant="outlined" className={clsx(classes.formControl)}>
-          <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
+          <InputLabel id="demo-simple-select-outlined-label">Odbiorca</InputLabel>
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
             name="chooseUser"
             value={message.chooseUser}
-            label="Age"
+            label="Odbiorca"
             onChange={(e) => handleChange(e)}
           >
             {usersToChat &&
