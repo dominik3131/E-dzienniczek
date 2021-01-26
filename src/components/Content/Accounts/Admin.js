@@ -4,14 +4,37 @@ import ReceviedMessages from "../Messages/ReceivedMessages";
 import SentMessages from "../Messages/SentMessages";
 import ShowSingleMessage from "../Messages/ShowSingleMessage";
 import NewMessage from "../Messages/NewMessage";
-
+import AnnouncementList from "../Announcement/AnnouncementList";
+import Classes from "../TeacherClasses/Classes";
+import ClassesTabs from "../TeacherClasses/ClassesTabs";
+import AnnouncementCreateForm from "../Announcement/AnnouncementCreateForm";
+import UserCreateForm from "../Users/UserCreateForm";
 const Student = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
-      <Route exact path={path}>
-        <p>Komponent</p>
-      </Route>
+      <Route exact path={path}></Route>
+      <Route
+        path={`${path}/users/create`}
+        exact
+        component={UserCreateForm}
+      />
+      <Route path={`${path}/class`} exact component={Classes} />
+      <Route
+        path={`${path}/class/:classId/:subjectId`}
+        exact
+        component={ClassesTabs}
+      />
+      <Route
+        path={`${path}/announcements`}
+        exact
+        component={AnnouncementList}
+      />
+      <Route
+        path={`${path}/announcements/create`}
+        exact
+        component={AnnouncementCreateForm}
+      />
       <Route
         path={`${path}/messages/received`}
         exact

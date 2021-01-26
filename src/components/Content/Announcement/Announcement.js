@@ -17,8 +17,7 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        minWidth: 300,
-        maxWidth: 800,
+        minWidth: 400,
     },
     expand: {
         transform: 'rotate(0deg)',

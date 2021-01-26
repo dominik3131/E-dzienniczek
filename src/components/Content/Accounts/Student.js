@@ -12,12 +12,10 @@ const Student = () => {
   return (
     <Switch>
       <Route exact path={path}>
-        <p>Komponent</p>
+      
       </Route>
       <Route path={`${path}/subjects`} exact component={SubjectsForStudent} />
-      <Route path={`${path}/polls`} exact>
-        <div>Komponent polls</div>
-      </Route>
+
       <Route
         path={`${path}/announcements`}
         exact

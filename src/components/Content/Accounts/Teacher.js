@@ -7,13 +7,15 @@ import NewMessage from "../Messages/NewMessage";
 import AnnouncementList from "../Announcement/AnnouncementList";
 import Classes from "../TeacherClasses/Classes";
 import ClassesTabs from "../TeacherClasses/ClassesTabs";
+import AnnouncementCreateForm from "../Announcement/AnnouncementCreateForm";
+import UserCreateForm from "../Users/UserCreateForm";
 
 const Student = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
       <Route exact path={path}>
-        <p>Komponent</p>
+       
       </Route>
       <Route path={`${path}/class`} exact component={Classes} />
       <Route
@@ -21,13 +23,20 @@ const Student = () => {
         exact
         component={ClassesTabs}
       />
-      <Route path={`${path}/polls`} exact>
-        <div>Komponent polls</div>
-      </Route>
       <Route
-        path={`${path}/announcements/create`}
+        path={`${path}/users/create`}
+        exact
+        component={UserCreateForm}
+      />
+      <Route
+        path={`${path}/announcements`}
         exact
         component={AnnouncementList}
+      />
+       <Route
+        path={`${path}/announcements/create`}
+        exact
+        component={AnnouncementCreateForm}
       />
       <Route
         path={`${path}/messages/received`}

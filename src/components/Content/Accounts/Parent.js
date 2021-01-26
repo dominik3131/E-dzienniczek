@@ -12,7 +12,6 @@ const Student = () => {
   return (
     <Switch>
       <Route exact path={path}>
-        <p>Komponent</p>
       </Route>
       <Route path={`${path}/subjects`} exact component={SubjectsForParent} />
       <Route

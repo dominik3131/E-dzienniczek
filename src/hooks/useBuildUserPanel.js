@@ -36,14 +36,15 @@ const useBuildUserPanel = () => {
     switch (type) {
       case "ADMINISTRATOR": {
         sidebarMenu = [
-          { title: "Konta użytkowników", url: "/users" },
+          { title: "Dodaj użytkownika", url: "/users/create", icon: 'usersCreate' },
           {
             title: "Wiadomości",
             url: "/messages",
+            icon: "messages",
             submenu: [
-              { title: "Nowa wiadomość", url: "/messages/new" },
-              { title: "Wysłane", url: "/messages/sent" },
-              { title: "Odebrane", url: "/messages/received" },
+              { title: "Nowa wiadomość", url: "/messages/new", icon: 'newMsg' },
+              { title: "Wysłane", url: "/messages/sent", icon: 'sentMsg' },
+              { title: "Odebrane", url: "/messages/received", icon: 'receivedMsg' },
             ],
           },
         ];
@@ -51,16 +52,18 @@ const useBuildUserPanel = () => {
       }
       case "TEACHER": {
         sidebarMenu = [
-          { title: "Twoje klasy", url: "/class" },
-          { title: "Ankiety", url: "/polls" },
-          { title: "Nadaj ogłoszenie", url: "/announcements/create" },
+          { title: "Twoje klasy", url: "/class", icon: 'classes' },
+          { title: "Ogłoszenia", url: "/announcements", icon: 'announcements' },
+          { title: "Nadaj ogłoszenie", url: "/announcements/create", icon: 'announcementCreate' },
+          { title: "Dodaj użytkownika", url: "/users/create", icon: 'usersCreate' },
           {
             title: "Wiadomości",
             url: "/messages",
+            icon: "messages",
             submenu: [
-              { title: "Nowa wiadomość", url: "/messages/new" },
-              { title: "Wysłane", url: "/messages/sent" },
-              { title: "Odebrane", url: "/messages/received" },
+              { title: "Nowa wiadomość", url: "/messages/new", icon: 'newMsg' },
+              { title: "Wysłane", url: "/messages/sent", icon: 'sentMsg' },
+              { title: "Odebrane", url: "/messages/received", icon: 'receivedMsg' },
             ],
           },
         ];
@@ -69,16 +72,16 @@ const useBuildUserPanel = () => {
       }
       case "STUDENT": {
         sidebarMenu = [
-          { title: "Przedmioty i oceny", url: "/subjects" },
-          { title: "Ankiety", url: "/polls" },
-          { title: "Ogłoszenia", url: "/announcements" },
+          { title: "Przedmioty i oceny", url: "/subjects", icon: 'subjects' },
+          { title: "Ogłoszenia", url: "/announcements", icon: 'announcements' },
           {
             title: "Wiadomości",
             url: "/messages",
+            icon: "messages",
             submenu: [
-              { title: "Nowa wiadomość", url: "/messages/new" },
-              { title: "Wysłane", url: "/messages/sent" },
-              { title: "Odebrane", url: "/messages/received" },
+              { title: "Nowa wiadomość", url: "/messages/new", icon: 'newMsg' },
+              { title: "Wysłane", url: "/messages/sent", icon: 'sentMsg' },
+              { title: "Odebrane", url: "/messages/received", icon: 'receivedMsg' },
             ],
           },
         ];
@@ -87,15 +90,15 @@ const useBuildUserPanel = () => {
       }
       case "PARENT": {
         sidebarMenu = [
-          { title: "Przedmioty i oceny", url: "/subjects" },
-          { title: "Ogłoszenia", url: "/announcements" },
+          { title: "Przedmioty i oceny", url: "/subjects", icon: 'subjects' },
+          { title: "Ogłoszenia", url: "/announcements", icon: 'announcements' },
           {
             title: "Wiadomości",
             url: "/messages",
             submenu: [
-              { title: "Nowa wiadomość", url: "/messages/new" },
-              { title: "Wysłane", url: "/messages/sent" },
-              { title: "Odebrane", url: "/messages/received" },
+              { title: "Nowa wiadomość", url: "/messages/new", icon: 'newMsg' },
+              { title: "Wysłane", url: "/messages/sent", icon: 'sentMsg' },
+              { title: "Odebrane", url: "/messages/received", icon: 'receivedMsg' },
             ],
           },
         ];
