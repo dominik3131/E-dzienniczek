@@ -23,7 +23,9 @@ urlpatterns = [
     path('teachers', index, name='index'),
     path('teachers/<int:pk>', index, name='index'),
     path('admin', admin.site.urls),
-
+    path('users/*', index, name='index'),
+    path('users', index, name='index'),
+    
     path('api/students', StudentsList.as_view()),
     path('api/students/<int:pk>', StudentDetail.as_view()),
     path('api/parents', ParentsList.as_view()),
